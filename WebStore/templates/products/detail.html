@@ -8,6 +8,13 @@
 <p>{{ product.unit_price }}</p>
 <p>{{ product.is_unit_sellable }}</p>
 <p>{{ product.inventory_quantity }}</p>
+
+<form action="{% url 'order:add_to_cart' %}" method="post">{% csrf_token %}
+    <input type="hidden" name="add_product" value="{{product.id}}">
+    <input type="number" min="1" name="add_amount" value="1">
+    <input type="submit" value="Add to cart">
+</form>
+
 {% for image in product.image_set.all %}
     <img src="{{ image.image.url }}" alt="image" />
 {% endfor %}

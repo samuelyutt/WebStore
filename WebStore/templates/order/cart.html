@@ -1,0 +1,10 @@
+<h1>Cart</h1>
+
+<ol>
+{% for item in cart_items %}
+    <li>
+        <a href="{% url 'products:detail' item.product.id %}">{{ item.product }}</a>
+        <p>${{ item.product.unit_price }} * {{ item.amount }}</p>
+    </li>
+{% endfor %}
+</ol>
