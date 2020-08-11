@@ -2,6 +2,9 @@ from django.db import models
 
 # Create your models here.
 class Settings(models.Model):
+    class Meta:
+        verbose_name_plural = "settings"
+    
     site_name = models.CharField(max_length=200)
     site_logo_small = models.ImageField(upload_to='administration')
     site_logo_large = models.ImageField(upload_to='administration')
