@@ -1,0 +1,12 @@
+<h1>All products</h1>
+
+<a href="{% url 'administration:create-product' %}">Add</a>
+<ol>
+{% for product in object_list %}
+    <li>
+        <a href="{% url 'products:detail' product.id %}">{{ product }}</a>
+        <a href="{% url 'administration:update-product' product.id %}">Edit</a>
+        <a href="{% url 'administration:delete-product' product.id %}">Delete</a>
+    </li>
+{% endfor %}
+</ol>

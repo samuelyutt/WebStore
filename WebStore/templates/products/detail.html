@@ -1,7 +1,13 @@
 <h1>{{ product }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
+<p>{{ product.category }}</p>
 <p>{{ product.utility }}</p>
 <p>{{ product.ingredient }}</p>
 <p>{{ product.description }}</p>
+<p>{{ product.unit_price }}</p>
+<p>{{ product.is_unit_sellable }}</p>
+<p>{{ product.inventory_quantity }}</p>
+{% for image in product.image_set.all %}
+    <img src="{{ image.image.url }}" alt="image" />
+{% endfor %}
