@@ -19,22 +19,22 @@ def cart(request):
     return render(request, 'order/cart.html', context)
 
 @login_required
-def add_to_cart(request):
+def edit_cart_item(request):
     user = request.user
-    add_product = Product.objects.get(id=int(request.POST['add_product']))
-    add_amount = int(request.POST['add_amount'])
-    
-    print(add_product)
-    print(add_product.name)
-    print(add_amount)
+    product = Product.objects.get(id=int(request.POST['product']))
+    amount = int(request.POST['amount'])
+    item = None
 
     try:
-        item = user.cartitem_set.get(product=add_product)
-        item.amount += add_amount
-        item.save()
+        item = user.cartitem_set.get(product=product)
+        item.amount += amount
     except:
-        new_item = CartItem(user=user, product=add_product, amount=add_amount)
-        new_item.save()
+        item = CartItem(user=user, product=product, amount=amount)
+    
+    if item.amount > 0:
+        item.save()
+    else:
+        item.delete()
 
     context = {}
     context['cart_items'] = user.cartitem_set.all()

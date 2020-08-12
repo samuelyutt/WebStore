@@ -5,6 +5,21 @@
     <li>
         <a href="{% url 'products:detail' item.product.id %}">{{ item.product }}</a>
         <p>${{ item.product.unit_price }} * {{ item.amount }}</p>
+        <form action="{% url 'order:edit_cart_item' %}" method="post">{% csrf_token %}
+            <input type="hidden" name="product" value="{{ item.product.id }}">
+            <input type="hidden" name="amount" value="1">
+            <input type="submit" value="+">
+        </form>
+        <form action="{% url 'order:edit_cart_item' %}" method="post">{% csrf_token %}
+            <input type="hidden" name="product" value="{{ item.product.id }}">
+            <input type="hidden" name="amount" value="-1">
+            <input type="submit" value="-">
+        </form>
+        <form action="{% url 'order:edit_cart_item' %}" method="post">{% csrf_token %}
+            <input type="hidden" name="product" value="{{ item.product.id }}">
+            <input type="hidden" name="amount" value="-{{ item.amount }}">
+            <input type="submit" value="Remove">
+        </form>
     </li>
 {% endfor %}
 </ol>
