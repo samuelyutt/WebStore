@@ -5,11 +5,16 @@ from .models import CartItem, Order, OrderItem
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ('product', 'user', 'amount')
 
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'user_name', 'shipping_fee', 'total_amount', 'status', 'payment', 'is_canceled')
-
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('item_name', 'order', 'unit_price', 'amount', 'product')
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'user_name', 'shipping_fee', 'total_amount', 'status', 'payment', 'is_canceled')
+    inlines = [OrderItemInline]
 
 
 admin.site.register(CartItem, CartItemAdmin)

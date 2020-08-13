@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Settings(models.Model):
@@ -15,3 +16,7 @@ class Settings(models.Model):
     contact_email = models.CharField(max_length=100)
     contact_address = models.CharField(max_length=200)
     copyright_info = models.CharField(max_length=200)
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    shipping_address = models.CharField(max_length=200)
