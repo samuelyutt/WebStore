@@ -19,4 +19,5 @@ class Settings(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    shipping_postal_code = models.CharField(max_length=6)
     shipping_address = models.CharField(max_length=200)

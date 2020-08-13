@@ -19,6 +19,7 @@ class Order(models.Model):
     
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     user_name = models.CharField(max_length=100)
+    shipping_postal_code = models.CharField(max_length=6)
     shipping_address = models.CharField(max_length=200)
     shipping_fee = models.IntegerField(default=60)
     total_amount = models.IntegerField()

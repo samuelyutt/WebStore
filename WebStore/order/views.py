@@ -45,13 +45,16 @@ def order_create(request):
     # try:
     user = request.user
     cart_items = user.cartitem_set.all()
+    shipping_fee = 60
+
     if cart_items:
         order = Order(
             user=user, 
             user_name=user.last_name + ' ' + user.first_name,
+            shipping_postal_code=user.userprofile.shipping_postal_code,
             shipping_address=user.userprofile.shipping_address,
-            shipping_fee=60,
-            total_amount=101,
+            shipping_fee=shipping_fee,
+            total_amount=shipping_fee,
             status=0,
             payment=0,
             is_canceled=False)
@@ -66,6 +69,12 @@ def order_create(request):
                 product=cart_item.product
             )
             order_item.save()
+            order.total_amount += order_item.unit_price * order_item.amount if order_item.amount > 0 else 0
+
+        for cart_item in cart_items:
+            cart_item.delete()
+
+        order.save()
     return HttpResponseRedirect(reverse('order:cart'))
     # except:
     #     return HttpResponseRedirect(reverse('products:index')) #home
