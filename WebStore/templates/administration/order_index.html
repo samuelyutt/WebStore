@@ -1,0 +1,11 @@
+<h1>All Orders</h1>
+
+<a href="{% url 'administration:create-order' %}">Add</a>
+<ol>
+{% for order in object_list %}
+    <li>
+        <a href="{% url 'administration:order-detail' order.id %}">Order {{ order.id }}</a>
+        <a href="{% url 'administration:update-order' order.id %}">Edit</a>
+    </li>
+{% endfor %}
+</ol>

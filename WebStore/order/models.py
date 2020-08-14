@@ -26,6 +26,7 @@ class Order(models.Model):
     status = models.IntegerField(default=0, choices=STATUS_CHOICES)
     payment = models.IntegerField(default=0, choices=PAYMENT_CHOICES)
     is_canceled = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class OrderItem(models.Model):

@@ -1,0 +1,12 @@
+<h1>Order {{ order.id }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<p>{{ order.user }}</p>
+<p>{{ order.user_name }}</p>
+<p>{{ order.shipping_postal_code }}</p>
+<p>{{ order.shipping_address }}</p>
+<p>{{ order.shipping_fee }}</p>
+<p>{{ order.get_status_display }}</p>
+<p>{{ order.get_payment_display }}</p>
+<p>{{ order.is_canceled }}</p>
+<p>{{ order.timestamp }}</p>

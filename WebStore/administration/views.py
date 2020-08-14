@@ -11,6 +11,7 @@ from products.models import Product
 from order.models import Order
 
 # Create your views here.
+############ PRODUCTS ############
 class StaffMemberRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff
@@ -46,3 +47,36 @@ class ProductDelete(StaffMemberRequiredMixin, generic.DeleteView):
     model = Product
     template_name = 'administration/product_confirm_delete.html'
     success_url = reverse_lazy('administration:products')
+
+
+############ ORDER ############
+class OrderIndex(StaffMemberRequiredMixin, generic.ListView):
+    template_name = 'administration/order_index.html'
+
+    def get_queryset(self):
+        return Order.objects.all()
+
+class OrderDetail(StaffMemberRequiredMixin, generic.DetailView):
+    model = Order
+    template_name = 'administration/order_detail.html'
+
+class OrderCreate(StaffMemberRequiredMixin, generic.CreateView):
+    model = Order
+    template_name = 'administration/order_form.html'
+    fields = ['user', 'user_name', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'is_canceled']
+    
+    def get_success_url(self):
+        return reverse('administration:orders')
+
+class OrderUpdate(StaffMemberRequiredMixin, generic.UpdateView):
+    model = Order
+    template_name = 'administration/order_update_form.html'
+    fields = ['user', 'user_name', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'is_canceled']    
+    
+    def get_success_url(self):
+        return reverse('administration:orders')
+
+# class OrderDelete(StaffMemberRequiredMixin, generic.DeleteView):
+#     model = Order
+#     template_name = 'administration/order_confirm_delete.html'
+#     success_url = reverse_lazy('administration:orders')
