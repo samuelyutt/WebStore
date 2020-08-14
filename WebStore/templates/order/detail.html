@@ -1,0 +1,46 @@
+<h1>Order {{ order.id }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
+{% if order %}
+
+{% if shipping_data_editable %}
+<form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
+    <input type="hidden" name="order_id" value="{{ order.id }}">
+    <p>
+        <label for="id_name">取貨人：</label>
+        <input type="text" name="user_name" value="{{ order.user_name }}" maxlength="100" required id="id_user_name">
+    </p>
+    <p>
+        <label for="id_name">郵遞區號：</label>
+        <input type="text" name="shipping_postal_code" value="{{ order.shipping_postal_code }}" maxlength="5" required id="id_shipping_postal_code">
+    </p>
+    <p>
+        <label for="id_name">收件地址：</label>
+        <input type="text" name="shipping_address" value="{{ order.shipping_address }}" maxlength="200" required id="id_shipping_address">
+    </p>
+{% else %}
+<p>{{ order.user_name }}</p>
+<p>{{ order.shipping_postal_code }}</p>
+<p>{{ order.shipping_address }}</p>
+{% endif %}
+<p>${{ order.shipping_fee }}</p>
+<p>${{ order.total_amount }}</p>
+<p>{{ order.get_status_display }}</p>
+<p>{{ order.get_payment_display }}</p>
+
+<ol>
+{% for order_item in order.orderitem_set.all %}
+    <li>
+        <p>{{ order_item.item_name }}</p>
+        <p>${{ order_item.unit_price }} * {{ order_item.amount }}</p>
+    </li>
+{% endfor %}
+</ol>
+
+{% if shipping_data_editable %}
+    <input type="submit" value="下一步">
+</form>
+{% endif %}
+
+{% endif %}

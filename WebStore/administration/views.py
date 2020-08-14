@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .models import Settings
 from products.models import Product
+from order.models import Order
 
 # Create your views here.
 class StaffMemberRequiredMixin(UserPassesTestMixin):
@@ -22,6 +23,7 @@ class ProductIndex(StaffMemberRequiredMixin, generic.ListView):
 
 class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
     model = Product
+    template_name = 'administration/product_form.html'
     fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_unit_sellable', 'inventory_quantity']
     
     def get_success_url(self):
@@ -34,6 +36,7 @@ class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
 
 class ProductUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Product
+    template_name = 'administration/product_update_form.html'
     fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_unit_sellable', 'inventory_quantity']
     
     def get_success_url(self):
@@ -41,4 +44,5 @@ class ProductUpdate(StaffMemberRequiredMixin, generic.UpdateView):
 
 class ProductDelete(StaffMemberRequiredMixin, generic.DeleteView):
     model = Product
+    template_name = 'administration/product_confirm_delete.html'
     success_url = reverse_lazy('administration:products')

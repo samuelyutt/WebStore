@@ -13,9 +13,9 @@ class CartItem(models.Model):
 
 
 class Order(models.Model):
-    STATUS_CHOICES = ((u'0', '已初始'), (u'1', '已成立'), (u'2', '已付款'), (u'3', '已出貨'), (u'4', '已完成'),
-                      (u'5', '已申請退回'), (u'6', '已收到退回商品'), (u'7', '已退款'))
-    PAYMENT_CHOICES = ((u'0', 'ATM匯款'),)
+    STATUS_CHOICES = ((0, '已初始'), (1, '已成立'), (2, '已付款'), (3, '已出貨'), (4, '已完成'),
+                      (5, '已申請退回'), (6, '已收到退回商品'), (7, '已退款'))
+    PAYMENT_CHOICES = ((0, 'ATM匯款'),)
     
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     user_name = models.CharField(max_length=100)
@@ -23,8 +23,8 @@ class Order(models.Model):
     shipping_address = models.CharField(max_length=200)
     shipping_fee = models.IntegerField(default=60)
     total_amount = models.IntegerField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    payment = models.CharField(max_length=20, choices=PAYMENT_CHOICES)
+    status = models.IntegerField(default=0, choices=STATUS_CHOICES)
+    payment = models.IntegerField(default=0, choices=PAYMENT_CHOICES)
     is_canceled = models.BooleanField(default=False)
 
 
