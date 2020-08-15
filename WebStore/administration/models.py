@@ -18,6 +18,9 @@ class Settings(models.Model):
     copyright_info = models.CharField(max_length=200)
 
 class UserProfile(models.Model):
+    GENDER_CHOICES = ((0, '先生'), (1, '女士'))
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    gender = models.IntegerField(default=0, choices=GENDER_CHOICES)
     shipping_postal_code = models.CharField(max_length=6)
     shipping_address = models.CharField(max_length=200)

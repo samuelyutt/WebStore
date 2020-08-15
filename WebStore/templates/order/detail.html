@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+
 <h1>Order {{ order.id }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
@@ -21,6 +24,7 @@
     </p>
 {% else %}
 <p>{{ order.user_name }}</p>
+<p>{{ order.get_user_gender_display }}</p>
 <p>{{ order.shipping_postal_code }}</p>
 <p>{{ order.shipping_address }}</p>
 {% endif %}
@@ -45,3 +49,5 @@
 {% endif %}
 
 {% endif %}
+
+{% endblock %}

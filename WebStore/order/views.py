@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-
+from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -41,6 +41,12 @@ def cart_item_edit(request, product_id=0):
     except:
         return HttpResponseRedirect(reverse('products:index')) #home
 
+class IndexView(LoginRequiredMixin, generic.ListView):
+    template_name = 'order/index.html'
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
 @login_required
 def order_detail(request, order_id):
     try:
@@ -70,9 +76,13 @@ def order_create(request):
     shipping_fee = 60
 
     if cart_items:
+        user_name = user.last_name + ' ' + user.first_name
+        user_name = '' if user_name == ' ' else user_name
+
         order = Order(
             user=user, 
-            user_name=user.last_name + ' ' + user.first_name,
+            user_name=user_name,
+            user_gender=user.userprofile.gender,
             shipping_postal_code=user.userprofile.shipping_postal_code,
             shipping_address=user.userprofile.shipping_address,
             shipping_fee=shipping_fee,
@@ -118,14 +128,14 @@ def next_step(request):
 
     status = order.status
     if status == 0:
-        return order_shipping_data_confirm(request)
+        return order_confirm(request)
 
     return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
     #except:
 
 
 @login_required
-def order_shipping_data_confirm(request):
+def order_confirm(request):
     # try:
     shipping_data_editable_status = [0]
     user = request.user
