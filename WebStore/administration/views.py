@@ -90,7 +90,7 @@ def order_confirm_paid(request, order_id):
         try:
             order = Order.objects.get(id=order_id)
         except:
-            return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
+            return HttpResponseRedirect(reverse('administration:order_detail', args=[order_id]))
         
         order.status = 2 if order.status in [0, 1] else order.status
         order.save()

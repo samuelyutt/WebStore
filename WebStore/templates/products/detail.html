@@ -12,7 +12,7 @@
 <p>{{ product.is_unit_sellable }}</p>
 <p>{{ product.inventory_quantity }}</p>
 
-<form action="{% url 'order:edit_cart_item' product.id %}" method="post">{% csrf_token %}
+<form action="{% url 'order:cart_item_edit' product.id %}" method="post">{% csrf_token %}
     <input type="hidden" name="product_id" value="{{ product.id }}">
     <input type="number" min="1" name="amount" value="1">
     <input type="submit" value="Add to cart">
