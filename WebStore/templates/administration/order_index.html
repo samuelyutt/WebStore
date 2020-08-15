@@ -8,16 +8,24 @@
         <a href="{% url 'administration:order_update' order.id %}">Edit</a>
         {{ order.get_payment_display }} 
         {{ order.get_status_display }} 
+
+        <form action="{% url 'administration:order_next_step' order.id %}" method="post">{% csrf_token %}
+                <input type="hidden" name="current_page" value="orders">
         {% if order.status == 1 and order.payment == 0 %}
             {% if order.remittance_account %}
-                <form action="{% url 'administration:order_confirm_paid' order.id %}" method="get">{% csrf_token %}
-                    <input type="hidden" name="current_page" value="order_index">
-                    <input type="submit" value="確認收到付款">
-                </form>
+                <input type="hidden" name="next_status" value="2">
+                <input type="submit" value="確認收到付款">
             {% else %}
                 正在等待顧客填寫匯款帳號 
             {% endif %}
+        {% elif order.status == 2 %}
+                <input type="hidden" name="next_status" value="3">
+                <input type="submit" value="已出貨">
+        {% elif order.status == 3 %}
+                <input type="hidden" name="next_status" value="4">
+                <input type="submit" value="已完成">
         {% endif %}
+        </form>
     </li>
 {% endfor %}
 </ol>

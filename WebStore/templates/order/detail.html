@@ -7,69 +7,69 @@
 {% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
 {% if order %}
 
-{% if shipping_data_editable %}
-<form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
-    <input type="hidden" name="order_id" value="{{ order.id }}">
-    <p>
-        <label for="id_user_name">收件人</label>
-        <input type="text" name="user_name" value="{{ order.user_name }}" maxlength="100" required id="id_user_name">
-    </p>
-    <p>
-        <label for="id_user_gender">稱謂</label>
-        <select name="user_gender" id="id_user_gender">
-            <option value="0" {% if order.user_gender == 0 %}selected{% endif %}>先生</option>
-            <option value="1" {% if order.user_gender == 1 %}selected{% endif %}>女士</option>
-        </select>
-    </p>
-    <p>
-        <label for="id_user_contact_phone_no">聯絡電話</label>
-        <input type="text" name="user_contact_phone_no" value="{{ order.user_contact_phone_no }}" maxlength="20" required id="id_user_contact_phone_no">
-    </p>
-    <p>
-        <label for="id_shipping_postal_code">郵遞區號</label>
-        <input type="text" name="shipping_postal_code" value="{{ order.shipping_postal_code }}" maxlength="5" required id="id_shipping_postal_code">
-    </p>
-    <p>
-        <label for="id_shipping_address">收件地址</label>
-        <input type="text" name="shipping_address" value="{{ order.shipping_address }}" maxlength="200" required id="id_shipping_address">
-    </p>
-{% else %}
-<p>{{ order.user_name }}</p>
-<p>{{ order.get_user_gender_display }}</p>
-<p>{{ order.user_contact_phone_no }}</p>
-<p>{{ order.shipping_postal_code }}</p>
-<p>{{ order.shipping_address }}</p>
-{% endif %}
-
-<p>${{ order.shipping_fee }}</p>
-<p>${{ order.total_amount }}</p>
-<p>{{ order.get_status_display }}</p>
-<p>{{ order.get_payment_display }}</p>
-
-<p>{{ order.remittance_account }}</p>
-{% if remittance_account_editable %}
-    {% if order.remittance_account %}
-<a href="{% url 'order:edit_remittance_account' order.id %}">編輯匯款帳戶</a>
+    {% if shipping_data_editable %}
+        <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <p>
+                <label for="id_user_name">收件人</label>
+                <input type="text" name="user_name" value="{{ order.user_name }}" maxlength="100" required id="id_user_name">
+            </p>
+            <p>
+                <label for="id_user_gender">稱謂</label>
+                <select name="user_gender" id="id_user_gender">
+                    <option value="0" {% if order.user_gender == 0 %}selected{% endif %}>先生</option>
+                    <option value="1" {% if order.user_gender == 1 %}selected{% endif %}>女士</option>
+                </select>
+            </p>
+            <p>
+                <label for="id_user_contact_phone_no">聯絡電話</label>
+                <input type="text" name="user_contact_phone_no" value="{{ order.user_contact_phone_no }}" maxlength="20" required id="id_user_contact_phone_no">
+            </p>
+            <p>
+                <label for="id_shipping_postal_code">郵遞區號</label>
+                <input type="text" name="shipping_postal_code" value="{{ order.shipping_postal_code }}" maxlength="5" required id="id_shipping_postal_code">
+            </p>
+            <p>
+                <label for="id_shipping_address">收件地址</label>
+                <input type="text" name="shipping_address" value="{{ order.shipping_address }}" maxlength="200" required id="id_shipping_address">
+            </p>
     {% else %}
-<a href="{% url 'order:edit_remittance_account' order.id %}">填寫匯款帳戶</a>
+            <p>{{ order.user_name }}</p>
+            <p>{{ order.get_user_gender_display }}</p>
+            <p>{{ order.user_contact_phone_no }}</p>
+            <p>{{ order.shipping_postal_code }}</p>
+            <p>{{ order.shipping_address }}</p>
     {% endif %}
-{% endif %}
 
-<p>{{ order.timestamp }}</p>
+            <p>${{ order.shipping_fee }}</p>
+            <p>${{ order.total_amount }}</p>
+            <p>{{ order.get_status_display }}</p>
+            <p>{{ order.get_payment_display }}</p>
 
-<ol>
-{% for order_item in order.orderitem_set.all %}
-    <li>
-        <p>{{ order_item.item_name }}</p>
-        <p>${{ order_item.unit_price }} * {{ order_item.amount }}</p>
-    </li>
-{% endfor %}
-</ol>
+            <p>{{ order.remittance_account }}</p>
+    {% if remittance_account_editable %}
+        {% if order.remittance_account %}
+            <a href="{% url 'order:edit_remittance_account' order.id %}">編輯匯款帳戶</a>
+        {% else %}
+            <a href="{% url 'order:edit_remittance_account' order.id %}">填寫匯款帳戶</a>
+        {% endif %}
+    {% endif %}
 
-{% if shipping_data_editable %}
-    <input type="submit" value="下一步">
-</form>
-{% endif %}
+            <p>{{ order.timestamp }}</p>
+
+    <ol>
+    {% for order_item in order.orderitem_set.all %}
+        <li>
+            <p>{{ order_item.item_name }}</p>
+            <p>${{ order_item.unit_price }} * {{ order_item.amount }}</p>
+        </li>
+    {% endfor %}
+    </ol>
+
+    {% if shipping_data_editable %}
+        <input type="submit" value="下一步">
+    </form>
+    {% endif %}
 
 {% endif %}
 

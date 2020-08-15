@@ -82,22 +82,22 @@ class OrderUpdate(StaffMemberRequiredMixin, generic.UpdateView):
 #     success_url = reverse_lazy('administration:orders')
 
 @staff_member_required
-def order_confirm_paid(request, order_id):
+def order_next_step(request, order_id):
     try:
-        context = {}
         order = None
-
         try:
             order = Order.objects.get(id=order_id)
         except:
             return HttpResponseRedirect(reverse('administration:order_detail', args=[order_id]))
         
-        order.status = 2 if order.status in [0, 1] else order.status
+        next_status = int(request.POST.get('next_status', order.status))
+        order.status = next_status if order.status < next_status else order.status
         order.save()
-        current_page = request.GET.get('current_page', '')
-        if current_page == 'order_index':
-            return HttpResponseRedirect(reverse('administration:orders'))
-        else:
+        
+        current_page = request.POST.get('current_page', 'orders')
+        if current_page == 'order_detail':
             return HttpResponseRedirect(reverse('administration:order_detail', args=[order_id]))
+        else:
+            return HttpResponseRedirect(reverse('administration:orders'))
     except:
         return HttpResponseRedirect(reverse('products:index')) #home
