@@ -11,15 +11,22 @@
 <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
     <input type="hidden" name="order_id" value="{{ order.id }}">
     <p>
-        <label for="id_user_name">取貨人：</label>
+        <label for="id_user_name">收件人</label>
         <input type="text" name="user_name" value="{{ order.user_name }}" maxlength="100" required id="id_user_name">
     </p>
     <p>
-        <label for="id_shipping_postal_code">郵遞區號：</label>
+        <label for="id_user_gender">稱謂</label>
+        <select name="user_gender" id="id_user_gender">
+            <option value="0" {% if order.user_gender == 0 %}selected{% endif %}>先生</option>
+            <option value="1" {% if order.user_gender == 1 %}selected{% endif %}>女士</option>
+        </select>
+    </p>
+    <p>
+        <label for="id_shipping_postal_code">郵遞區號</label>
         <input type="text" name="shipping_postal_code" value="{{ order.shipping_postal_code }}" maxlength="5" required id="id_shipping_postal_code">
     </p>
     <p>
-        <label for="id_shipping_address">收件地址：</label>
+        <label for="id_shipping_address">收件地址</label>
         <input type="text" name="shipping_address" value="{{ order.shipping_address }}" maxlength="200" required id="id_shipping_address">
     </p>
 {% else %}

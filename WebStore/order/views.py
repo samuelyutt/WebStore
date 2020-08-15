@@ -150,6 +150,7 @@ def order_confirm(request):
         return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
     
     user_name = request.POST.get('user_name', '')
+    user_gender = request.POST.get('user_gender', 0)
     shipping_postal_code = request.POST.get('shipping_postal_code', '')
     shipping_address = request.POST.get('shipping_address', '')
 
@@ -157,6 +158,7 @@ def order_confirm(request):
         return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
 
     order.user_name = user_name
+    order.user_gender = user_gender
     order.shipping_postal_code = shipping_postal_code
     order.shipping_address = shipping_address
     order.status = 1
