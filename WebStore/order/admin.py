@@ -13,7 +13,7 @@ class OrderItemInline(admin.TabularInline):
     extra = 0
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'user_name', 'user_gender', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account', 'timestamp', 'is_canceled')
+    list_display = ('user', 'user_name', 'user_gender', 'user_contact_phone_no', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account', 'timestamp', 'is_canceled')
     inlines = [OrderItemInline]
 
 

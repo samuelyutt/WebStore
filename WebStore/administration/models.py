@@ -24,3 +24,4 @@ class UserProfile(models.Model):
     gender = models.IntegerField(default=0, choices=GENDER_CHOICES)
     shipping_postal_code = models.CharField(max_length=6)
     shipping_address = models.CharField(max_length=200)
+    contact_phone_no = models.CharField(max_length=20)

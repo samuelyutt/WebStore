@@ -21,6 +21,7 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name='使用者')
     user_name = models.CharField(max_length=100, verbose_name='收件人')
     user_gender = models.IntegerField(default=0, choices=GENDER_CHOICES, verbose_name='稱謂')
+    user_contact_phone_no = models.CharField(max_length=20, verbose_name='聯絡電話')
     shipping_postal_code = models.CharField(max_length=6, verbose_name='郵遞區號')
     shipping_address = models.CharField(max_length=200, verbose_name='收件地址')
     shipping_fee = models.IntegerField(default=60, verbose_name='運費')

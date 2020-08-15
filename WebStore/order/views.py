@@ -85,6 +85,7 @@ def order_create(request):
             user=user, 
             user_name=user_name,
             user_gender=user.userprofile.gender,
+            user_contact_phone_no=user.userprofile.contact_phone_no,
             shipping_postal_code=user.userprofile.shipping_postal_code,
             shipping_address=user.userprofile.shipping_address,
             shipping_fee=shipping_fee,
@@ -151,14 +152,16 @@ def order_confirm(request):
     
     user_name = request.POST.get('user_name', '')
     user_gender = request.POST.get('user_gender', 0)
+    user_contact_phone_no = request.POST.get('user_contact_phone_no', '')
     shipping_postal_code = request.POST.get('shipping_postal_code', '')
     shipping_address = request.POST.get('shipping_address', '')
 
-    if user_name == '' or shipping_postal_code == '' or shipping_address == '' or order.status not in shipping_data_editable_status:
+    if user_name == '' or user_contact_phone_no == '' or shipping_postal_code == '' or shipping_address == '' or order.status not in shipping_data_editable_status:
         return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
 
     order.user_name = user_name
     order.user_gender = user_gender
+    order.user_contact_phone_no = user_contact_phone_no
     order.shipping_postal_code = shipping_postal_code
     order.shipping_address = shipping_address
     order.status = 1

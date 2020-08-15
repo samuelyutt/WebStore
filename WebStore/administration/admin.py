@@ -9,7 +9,7 @@ class SettingsAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'is_visitable', 'is_sellable', 'contact_email', 'contact_manager')
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'shipping_postal_code', 'shipping_address')
+    list_display = ('user', 'gender', 'contact_phone_no', 'shipping_postal_code', 'shipping_address')
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile

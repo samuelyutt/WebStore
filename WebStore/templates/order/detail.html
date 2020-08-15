@@ -22,6 +22,10 @@
         </select>
     </p>
     <p>
+        <label for="id_user_contact_phone_no">聯絡電話</label>
+        <input type="text" name="user_contact_phone_no" value="{{ order.user_contact_phone_no }}" maxlength="20" required id="id_user_contact_phone_no">
+    </p>
+    <p>
         <label for="id_shipping_postal_code">郵遞區號</label>
         <input type="text" name="shipping_postal_code" value="{{ order.shipping_postal_code }}" maxlength="5" required id="id_shipping_postal_code">
     </p>
@@ -32,6 +36,7 @@
 {% else %}
 <p>{{ order.user_name }}</p>
 <p>{{ order.get_user_gender_display }}</p>
+<p>{{ order.user_contact_phone_no }}</p>
 <p>{{ order.shipping_postal_code }}</p>
 <p>{{ order.shipping_address }}</p>
 {% endif %}
@@ -41,9 +46,9 @@
 <p>{{ order.get_status_display }}</p>
 <p>{{ order.get_payment_display }}</p>
 
+<p>{{ order.remittance_account }}</p>
 {% if remittance_account_editable %}
     {% if order.remittance_account %}
-<p>{{ order.remittance_account }}</p>
 <a href="{% url 'order:edit_remittance_account' order.id %}">編輯匯款帳戶</a>
     {% else %}
 <a href="{% url 'order:edit_remittance_account' order.id %}">填寫匯款帳戶</a>

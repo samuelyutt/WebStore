@@ -63,7 +63,7 @@ class OrderDetail(StaffMemberRequiredMixin, generic.DetailView):
 class OrderCreate(StaffMemberRequiredMixin, generic.CreateView):
     model = Order
     template_name = 'administration/order_form.html'
-    fields = ['user', 'user_name', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'is_canceled']
+    fields = ['user', 'user_name', 'user_gender', 'user_contact_phone_no', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account', 'is_canceled']
     
     def get_success_url(self):
         return reverse('administration:orders')
@@ -71,7 +71,7 @@ class OrderCreate(StaffMemberRequiredMixin, generic.CreateView):
 class OrderUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Order
     template_name = 'administration/order_update_form.html'
-    fields = ['user', 'user_name', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'is_canceled']    
+    fields = ['user', 'user_name', 'user_gender', 'user_contact_phone_no', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account', 'is_canceled']    
     
     def get_success_url(self):
         return reverse('administration:orders')
@@ -80,3 +80,24 @@ class OrderUpdate(StaffMemberRequiredMixin, generic.UpdateView):
 #     model = Order
 #     template_name = 'administration/order_confirm_delete.html'
 #     success_url = reverse_lazy('administration:orders')
+
+@staff_member_required
+def order_confirm_paid(request, order_id):
+    try:
+        context = {}
+        order = None
+
+        try:
+            order = Order.objects.get(id=order_id)
+        except:
+            return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
+        
+        order.status = 2 if order.status in [0, 1] else order.status
+        order.save()
+        current_page = request.GET.get('current_page', '')
+        if current_page == 'order_index':
+            return HttpResponseRedirect(reverse('administration:orders'))
+        else:
+            return HttpResponseRedirect(reverse('administration:order_detail', args=[order_id]))
+    except:
+        return HttpResponseRedirect(reverse('products:index')) #home

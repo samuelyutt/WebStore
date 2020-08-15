@@ -12,3 +12,15 @@
 <p>{{ order.remittance_account }}</p>
 <p>{{ order.is_canceled }}</p>
 <p>{{ order.timestamp }}</p>
+
+{% if order.status == 1 and order.payment == 0 %}
+    {% if order.remittance_account %}
+        <!-- <a href="{% url 'administration:order_confirm_paid' order.id %}">確認收到付款</a> -->
+        <form action="{% url 'administration:order_confirm_paid' order.id %}" method="get">{% csrf_token %}
+            <input type="hidden" name="current_page" value="order_detail">
+            <input type="submit" value="確認收到付款">
+        </form>
+    {% else %}
+        正在等待顧客填寫匯款帳號 
+    {% endif %}
+{% endif %}
