@@ -14,7 +14,7 @@ class CartItem(models.Model):
 
 class Order(models.Model):
     GENDER_CHOICES = ((0, '先生'), (1, '女士'))
-    STATUS_CHOICES = ((0, '已初始'), (1, '已成立'), (2, '已付款'), (3, '已出貨'), (4, '已完成'),
+    STATUS_CHOICES = ((0, '已初始'), (1, '已成立'), (2, '已確認收到付款'), (3, '已出貨'), (4, '已完成'),
                       (5, '已申請退回'), (6, '已收到退回商品'), (7, '已退款'))
     PAYMENT_CHOICES = ((0, 'ATM匯款'),)
     
@@ -27,6 +27,7 @@ class Order(models.Model):
     total_amount = models.IntegerField()
     status = models.IntegerField(default=0, choices=STATUS_CHOICES)
     payment = models.IntegerField(default=0, choices=PAYMENT_CHOICES)
+    remittance_account = models.CharField(blank=True, max_length=5)
     is_canceled = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 

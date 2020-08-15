@@ -11,15 +11,15 @@
 <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
     <input type="hidden" name="order_id" value="{{ order.id }}">
     <p>
-        <label for="id_name">取貨人：</label>
+        <label for="id_user_name">取貨人：</label>
         <input type="text" name="user_name" value="{{ order.user_name }}" maxlength="100" required id="id_user_name">
     </p>
     <p>
-        <label for="id_name">郵遞區號：</label>
+        <label for="id_shipping_postal_code">郵遞區號：</label>
         <input type="text" name="shipping_postal_code" value="{{ order.shipping_postal_code }}" maxlength="5" required id="id_shipping_postal_code">
     </p>
     <p>
-        <label for="id_name">收件地址：</label>
+        <label for="id_shipping_address">收件地址：</label>
         <input type="text" name="shipping_address" value="{{ order.shipping_address }}" maxlength="200" required id="id_shipping_address">
     </p>
 {% else %}
@@ -28,10 +28,21 @@
 <p>{{ order.shipping_postal_code }}</p>
 <p>{{ order.shipping_address }}</p>
 {% endif %}
+
 <p>${{ order.shipping_fee }}</p>
 <p>${{ order.total_amount }}</p>
 <p>{{ order.get_status_display }}</p>
 <p>{{ order.get_payment_display }}</p>
+
+{% if remittance_account_editable %}
+    {% if order.remittance_account %}
+<p>{{ order.remittance_account }}</p>
+<a href="{% url 'order:edit_remittance_account' order.id %}">編輯匯款帳戶</a>
+    {% else %}
+<a href="{% url 'order:edit_remittance_account' order.id %}">填寫匯款帳戶</a>
+    {% endif %}
+{% endif %}
+
 <p>{{ order.timestamp }}</p>
 
 <ol>

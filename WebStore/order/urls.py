@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:order_id>/', views.order_detail, name='detail'),
     path('create/', views.order_create, name='create'),
     path('next-step/', views.next_step, name='next_step'),
+    path('<int:pk>/edit-remittance-account/', views.EditRemittanceAccount.as_view(), name='edit_remittance_account'),
 ]

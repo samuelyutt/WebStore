@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
@@ -63,6 +63,8 @@ def order_detail(request, order_id):
         context['order'] = order
         if order.status in shipping_data_editable_status:
             context['shipping_data_editable'] = True
+        if order.status == 1 and order.payment == 0:
+            context['remittance_account_editable'] = True
         # context['message'] = '這不是您的訂單，或此訂單不存在。'
         return render(request, 'order/detail.html', context)
     except:
@@ -152,7 +154,7 @@ def order_confirm(request):
     shipping_address = request.POST.get('shipping_address', '')
 
     if user_name == '' or shipping_postal_code == '' or shipping_address == '' or order.status not in shipping_data_editable_status:
-        return HttpResponseRedirect(reverse('order:detail'))
+        return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
 
     order.user_name = user_name
     order.shipping_postal_code = shipping_postal_code
@@ -164,3 +166,18 @@ def order_confirm(request):
 
     # except:
     #     return HttpRes
+
+class EditRemittanceAccount(LoginRequiredMixin, generic.UpdateView):
+    model = Order
+    template_name = 'order/remittance_account_update_form.html'
+    fields = ['remittance_account']
+
+    def get_context_data(self, **kwargs):
+        context = super(EditRemittanceAccount, self).get_context_data(**kwargs)
+        order = self.object
+        if order.user != self.request.user or order.status != 1:
+            raise Http404
+        return context
+        
+    def get_success_url(self):
+        return reverse('order:detail', args=[self.object.id])
