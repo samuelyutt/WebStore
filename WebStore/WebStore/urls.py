@@ -18,10 +18,18 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from . import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('auth/', views.customer_login, name='customer_login'),
+    path('auth/create/', views.customer_create, name='customer_create'),
+    path('auth/logout/', views.user_logout, name='logout'),
+    
     path('administration/', include('administration.urls')),
+
+    # path('', views.user_logout, name='home'),
     path('products/', include('products.urls')),
     path('order/', include('order.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

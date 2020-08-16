@@ -1,0 +1,46 @@
+<h1>註冊</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form method="post">{% csrf_token %}
+    <p>
+        <label for="id_username">電子郵件信箱 *</label>
+        <input type="email" name="username" value="{{ username }}" placeholder="電子郵件信箱（必填）" maxlength="100" required id="id_username">
+    </p>
+    <p>
+        <label for="id_password">密碼 *</label>
+        <input type="password" name="password" placeholder="密碼（必填）" minlength="8" maxlength="50" required id="id_password">
+    </p>
+    <p>
+        <label for="id_password_confirm">確認密碼 *</label>
+        <input type="password" name="password_confirm" placeholder="確認密碼（必填）" minlength="8" maxlength="50" required id="id_password_confirm">
+    </p>
+    <p>
+        <label for="id_last_name">姓 *</label>
+        <input type="text" name="last_name" value="{{ last_name }}" placeholder="姓（必填）" maxlength="20" required id="id_last_name">
+    </p>
+    <p>
+        <label for="id_first_name">名 *</label>
+        <input type="text" name="first_name" value="{{ first_name }}" placeholder="名（必填）" maxlength="40"" required id="id_first_name">
+    </p>
+    <p>
+        <label for="id_gender">稱謂 *</label>
+        <select name="gender" id="id_gender">
+            <option value="0" {% if gender == 0 %}selected{% endif %}>先生</option>
+            <option value="1" {% if gender == 1 %}selected{% endif %}>女士</option>
+        </select>
+    </p>
+    <p>
+        <label for="id_shipping_postal_code">郵遞區號</label>
+        <input type="text" name="shipping_postal_code" value="{{ shipping_postal_code }}" placeholder="郵遞區號" maxlength="5" id="id_shipping_postal_code">
+    </p>
+    <p>
+        <label for="id_shipping_address">收件地址</label>
+        <input type="text" name="shipping_address" value="{{ shipping_address }}" placeholder="收件地址" maxlength="200" id="id_shipping_address">
+    </p>
+    <p>
+        <label for="id_contact_phone_no">聯絡電話</label>
+        <input type="text" name="contact_phone_no" value="{{ contact_phone_no }}" placeholder="聯絡電話" maxlength="20" id="id_contact_phone_no">
+    </p>
+    <input type="submit" value="確認">
+</form>

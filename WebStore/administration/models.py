@@ -27,6 +27,6 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.IntegerField(default=0, choices=GENDER_CHOICES)
-    shipping_postal_code = models.CharField(max_length=6)
-    shipping_address = models.CharField(max_length=200)
-    contact_phone_no = models.CharField(max_length=20)
+    shipping_postal_code = models.CharField(max_length=5, blank=True)
+    shipping_address = models.CharField(max_length=200, blank=True)
+    contact_phone_no = models.CharField(max_length=20, blank=True)
