@@ -2,7 +2,7 @@
 {% block content %}
 
 <h1>Order {{ order.id }}</h1>
-<h2>填寫匯款帳戶</h2>
+<h2>填寫匯款帳號</h2>
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Update">

@@ -31,7 +31,7 @@ class Order(models.Model):
     total_amount = models.IntegerField(verbose_name='總金額')
     status = models.IntegerField(default=0, choices=STATUS_CHOICES, verbose_name='狀態')
     payment = models.IntegerField(default=0, choices=PAYMENT_CHOICES, verbose_name='付款方式')
-    remittance_account = models.CharField(blank=True, max_length=5, verbose_name='匯款帳號後五碼')
+    remittance_account = models.CharField(blank=True, max_length=5, verbose_name='匯款帳號末五碼')
     is_canceled = models.BooleanField(default=False, verbose_name='已取消')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='成立時間')
 

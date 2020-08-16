@@ -48,11 +48,7 @@
 
             <p>{{ order.remittance_account }}</p>
     {% if remittance_account_editable %}
-        {% if order.remittance_account %}
-            <a href="{% url 'order:edit_remittance_account' order.id %}">編輯匯款帳戶</a>
-        {% else %}
-            <a href="{% url 'order:edit_remittance_account' order.id %}">填寫匯款帳戶</a>
-        {% endif %}
+        <a href="{% url 'order:edit_remittance_account' order.id %}">{% if order.remittance_account %}編輯{% else %}填寫{% endif %}匯款帳號末五碼</a>
     {% endif %}
 
             <p>{{ order.timestamp }}</p>

@@ -4,9 +4,11 @@
 <p>{{ order.user }}</p>
 <p>{{ order.user_name }}</p>
 <p>{{ order.get_user_gender_display }}</p>
+<p>{{ order.user_contact_phone_no }}</p>
 <p>{{ order.shipping_postal_code }}</p>
 <p>{{ order.shipping_address }}</p>
-<p>{{ order.shipping_fee }}</p>
+<p>${{ order.shipping_fee }}</p>
+<p>${{ order.total_amount }}</p>
 <p>{{ order.get_status_display }}</p>
 <p>{{ order.get_payment_display }}</p>
 <p>{{ order.remittance_account }}</p>
