@@ -19,6 +19,7 @@ class Product(models.Model):
     unit_price = models.IntegerField(default=0)
     is_sellable = models.BooleanField(default=True)
     inventory_quantity = models.IntegerField(default=0)
+    cover_image = models.ImageField(blank=True)
 
     def __str__(self):
         return self.name

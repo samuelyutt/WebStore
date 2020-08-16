@@ -18,6 +18,9 @@
     <input type="submit" value="Add to cart">
 </form>
 
+{% if product.cover_image %}
+    <img src="{{ product.cover_image.url }}" alt="cover_image" />
+{% endif %}
 {% for image in product.image_set.all %}
     <img src="{{ image.image.url }}" alt="image" />
 {% endfor %}

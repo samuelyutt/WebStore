@@ -25,7 +25,7 @@ class ProductIndex(StaffMemberRequiredMixin, generic.ListView):
 class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
     model = Product
     template_name = 'administration/product_form.html'
-    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_sellable', 'inventory_quantity']
+    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_sellable', 'inventory_quantity', 'cover_image']
     
     def get_success_url(self):
         return reverse('administration:products')
@@ -38,7 +38,7 @@ class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
 class ProductUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Product
     template_name = 'administration/product_update_form.html'
-    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_sellable', 'inventory_quantity']
+    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_sellable', 'inventory_quantity', 'cover_image']
     
     def get_success_url(self):
         return reverse('administration:products')
