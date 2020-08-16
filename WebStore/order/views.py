@@ -16,6 +16,10 @@ from .models import CartItem, OrderItem, Order
 def cart(request):
     context = {}
     context['cart_items'] = request.user.cartitem_set.all()
+    for item in context['cart_items']:
+        if not item.is_valid():
+            context['is_not_valid'] = True
+            break
     return render(request, 'order/cart.html', context)
 
 @login_required
@@ -78,6 +82,10 @@ def order_create(request):
     shipping_fee = 60
 
     if cart_items:
+        for cart_item in cart_items:
+            if not cart_item.is_valid():
+                return HttpResponseRedirect(reverse('order:cart'))
+
         user_name = user.last_name + ' ' + user.first_name
         user_name = '' if user_name == ' ' else user_name
 
@@ -104,6 +112,8 @@ def order_create(request):
                 product=cart_item.product
             )
             order_item.save()
+            cart_item.product.inventory_quantity -= order_item.amount
+            cart_item.product.save()
             order.total_amount += order_item.unit_price * order_item.amount if order_item.amount > 0 else 0
 
         for cart_item in cart_items:

@@ -9,7 +9,7 @@
 <p>{{ product.ingredient }}</p>
 <p>{{ product.description }}</p>
 <p>{{ product.unit_price }}</p>
-<p>{{ product.is_unit_sellable }}</p>
+<p>{{ product.is_sellable }}</p>
 <p>{{ product.inventory_quantity }}</p>
 
 <form action="{% url 'order:cart_item_edit' product.id %}" method="post">{% csrf_token %}

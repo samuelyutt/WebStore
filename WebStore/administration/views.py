@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
@@ -25,7 +25,7 @@ class ProductIndex(StaffMemberRequiredMixin, generic.ListView):
 class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
     model = Product
     template_name = 'administration/product_form.html'
-    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_unit_sellable', 'inventory_quantity']
+    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_sellable', 'inventory_quantity']
     
     def get_success_url(self):
         return reverse('administration:products')
@@ -38,7 +38,7 @@ class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
 class ProductUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Product
     template_name = 'administration/product_update_form.html'
-    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_unit_sellable', 'inventory_quantity']
+    fields = ['category', 'name', 'unit_price', 'utility', 'ingredient', 'description', 'is_sellable', 'inventory_quantity']
     
     def get_success_url(self):
         return reverse('administration:products')
@@ -88,7 +88,7 @@ def order_next_step(request, order_id):
         try:
             order = Order.objects.get(id=order_id)
         except:
-            return HttpResponseRedirect(reverse('administration:order_detail', args=[order_id]))
+            raise Http404
         
         next_status = int(request.POST.get('next_status', order.status))
         order.status = next_status if order.status < next_status else order.status

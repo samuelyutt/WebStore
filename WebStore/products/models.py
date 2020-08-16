@@ -17,7 +17,7 @@ class Product(models.Model):
     ingredient = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     unit_price = models.IntegerField(default=0)
-    is_unit_sellable = models.BooleanField(default=True)
+    is_sellable = models.BooleanField(default=True)
     inventory_quantity = models.IntegerField(default=0)
 
     def __str__(self):

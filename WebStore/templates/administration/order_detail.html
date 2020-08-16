@@ -13,6 +13,15 @@
 <p>{{ order.is_canceled }}</p>
 <p>{{ order.timestamp }}</p>
 
+<ol>
+{% for order_item in order.orderitem_set.all %}
+    <li>
+        <p>{{ order_item.item_name }}</p>
+        <p>${{ order_item.unit_price }} * {{ order_item.amount }}</p>
+    </li>
+{% endfor %}
+</ol>
+
 <form action="{% url 'administration:order_next_step' order.id %}" method="post">{% csrf_token %}
     <input type="hidden" name="current_page" value="order_detail">
 {% if order.status == 1 and order.payment == 0 %}
