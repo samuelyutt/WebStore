@@ -12,10 +12,44 @@ header {
     padding: 0 20px;
 }
 
+main {
+    padding: 20px;
+}
+
+form {
+    margin: 0;
+}
+
+a, .button {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+    text-decoration: none !important; }
+    a:hover, a:focus , .button:hover, .button:focus {
+      outline: none !important;
+      -webkit-box-shadow: none;
+      box-shadow: none; }
+
 .center {
     display: grid;
     place-items: center;
 }
+
+.shadow-sm {
+    -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important; }
+
+.shadow {
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; }
+
+.shadow-lg {
+    -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important; }
+
+.shadow-none {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important; }
 
 .top-nav {
     background-color: yellow;
@@ -54,4 +88,107 @@ header {
 
 .nav-item a:hover {
     background-color: #f5f5f5;
+}
+
+.page-content {
+    background-color: yellowgreen;
+    margin: auto;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.title {
+    padding: 0 8px 0 8px;
+}
+
+.title h1 {
+    font-size: 28px;
+    font-weight: 900;
+    color: #444444;
+    border: solid;
+    border-width: 0 0 1px 0;
+    border-color: lightgray;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    flex: 1 1 300px;
+    margin: 8px;
+    border-radius: 20px;
+    background: lightpink;
+    height: 450px;
+    overflow: hidden;
+}
+
+.card:hover {
+    -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important; }
+
+
+.card + .large {
+    flex: 1 1 100%;
+}
+
+.card a {
+    text-decoration: none;
+}
+
+.card .cover-image {
+    width: 100%;
+    height: 310px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+}
+
+.cover-image img {
+    width: 100%;
+    height: auto;
+}
+
+.card .content {
+    background: lightblue;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 0 0 20px 20px;
+    padding: 10px;
+    position: relative;
+}
+
+.card .content .title {
+    color: #000;
+    font-size: 32px;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
+
+.card .content .sub-title {
+    color: #000;
+    font-size: 24px;
+}
+
+.card .content .function {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.button {
+    border-style: none;
+    padding: 8px 15px;
+    margin: 1px;
+    border-radius: 20px;
+}
+
+.add-to-cart {
+    color: orangered;
+    background-color: #ffe6d4;
+}
+
+.button:hover {
+    color: #ffe6d4;
+    background-color: orangered;
 }

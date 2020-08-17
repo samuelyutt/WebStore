@@ -1,14 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>All products</h1>
 
-<ol>
-{% for product in object_list %}
-    <li>
-        <a href="{% url 'products:detail' product.id %}">{{ product }}</a>
-    </li>
-{% endfor %}
-</ol>
+<div class="title">
+    <h1>所有產品</h1>
+</div>
+
+<div class="container">
+    {% for product in object_list %}
+        <div class="card shadow">
+            <a href="{% url 'products:detail' product.id %}">
+                <div class="cover-image">
+                    {% if product.cover_image %}
+                        <img src="{{ product.cover_image.url }}" alt="cover_image" />
+                    {% endif %}
+                </div>
+                <div class="content">
+                    <div class="title">
+                        {{ product }}
+                    </div>
+                    <div class="sub-title">
+                        {{ product.utility }}
+                    </div>
+                    <div class="function">
+                        <form action="{% url 'order:cart_item_edit' product.id %}" method="post">{% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="amount" value="1">
+                            <input class="add-to-cart button" type="submit" value="加入購物車">
+                        </form>
+                    </div>
+                </div>
+            </a>
+        </div>
+    
+    {% endfor %}
+</div>
 
 {% endblock %}
