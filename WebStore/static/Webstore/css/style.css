@@ -13,7 +13,7 @@ header {
 }
 
 main {
-    padding: 20px;
+    padding: 0 20px;
 }
 
 form {
@@ -97,11 +97,11 @@ a, .button {
     max-width: 1200px;
 }
 
-.title {
-    padding: 0 8px 0 8px;
+.caption {
+    /* padding: 0 8px 0 8px; */
 }
 
-.title h1 {
+.caption h1 {
     font-size: 28px;
     font-weight: 900;
     color: #444444;
@@ -113,15 +113,23 @@ a, .button {
 .container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+.container-jcleft {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
 }
 
 .card {
-    flex: 1 1 300px;
-    margin: 8px;
+    flex: 0 1 376px;
+    margin: 12px;
     border-radius: 20px;
     background: lightpink;
     height: 450px;
     overflow: hidden;
+    position: relative;
 }
 
 .card:hover {
@@ -137,40 +145,42 @@ a, .button {
     text-decoration: none;
 }
 
-.card .cover-image {
+.card .card-image {
     width: 100%;
     height: 310px;
     overflow: hidden;
-    border-radius: 20px 20px 0 0;
 }
 
-.cover-image img {
+.card-image img {
     width: 100%;
     height: auto;
+    min-height: 100%;
 }
 
-.card .content {
+.card .card-content {
     background: lightblue;
-    height: 120px;
-    overflow: hidden;
-    border-radius: 0 0 20px 20px;
-    padding: 10px;
-    position: relative;
+    padding: 10px 18px;
 }
 
-.card .content .title {
+.card .card-content .title {
     color: #000;
-    font-size: 32px;
+    font-size: 26px;
     font-weight: 900;
-    margin-bottom: 5px;
 }
 
-.card .content .sub-title {
-    color: #000;
-    font-size: 24px;
+.card .card-content .sub-title {
+    color: #666666;
+    font-size: 20px;
+    margin-top: 18px;
 }
 
-.card .content .function {
+.card .card-content .tag {
+    color: #222222;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.card .card-content .function {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -191,4 +201,90 @@ a, .button {
 .button:hover {
     color: #ffe6d4;
     background-color: orangered;
+}
+
+.top-section {
+    min-width: 400px;
+    overflow: hidden;
+    flex: 1 1 50%;
+}
+
+.top-section .intro {
+    padding-right: 18px;
+    padding-bottom: 18px;
+    background-color: lightblue;
+}
+
+.top-section .intro .title {
+    color: #000;
+    font-size: 32px;
+    font-weight: 900;
+}
+
+.top-section .intro .sub-title {
+    color: #666666;
+    font-size: 20px;
+    margin-top: 18px;
+}
+
+.top-section .intro .tag {
+    color: #222222;
+    font-size: 16px;
+    margin-top: 0px;
+}
+
+.top-section .intro .function {
+    margin-top: 28px;
+}
+
+.top-section .cover-image {
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.top-section img {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+}
+
+.product-info {
+    margin-top: 40px;
+}
+
+.product-info .title {
+    color: #000;
+    font-size: 28px;
+    margin-top: 20px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    border: solid;
+    border-width: 1px 0 0 0;
+    border-color: lightgray;
+}
+
+.product-info .row {
+    padding-top: 20px;
+}
+
+.product-info .attribute-name {
+    color: #000;
+    font-size: 22px;
+    text-align: left;
+    flex: 1 1 220px;
+    max-width: 220px;
+    padding-bottom: 20px;
+}
+
+.product-info .attribute {
+    color: #000;
+    font-size: 16px;
+    text-align: left;
+    flex: 1 1 500px;
+    line-height: 24px;
+    padding-bottom: 40px;
+    border: solid;
+    border-width: 0 0 1px 0;
+    border-color: lightgray;
 }

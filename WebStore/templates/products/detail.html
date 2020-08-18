@@ -1,8 +1,83 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>{{ product }}</h1>
+<div class="caption"">
+    <h1>產品</h1>
+</div>
 
+<div class="container">
+    <div class="top-section">
+        <div class="intro">
+            <div class="title">
+                {{ product }}
+            </div>
+            <div class="sub-title">
+                {{ product.utility|truncatechars:16 }}
+            </div>
+            <div class="tag price-tag">
+                NT$ {{ product.unit_price }}
+            </div>
+            {% if product.inventory_quantity > 0 %}
+                <div class="function">
+                    <form action="{% url 'order:cart_item_edit' product.id %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input type="hidden" name="amount" value="1">
+                        <input class="add-to-cart button" type="submit" value="加入購物車">
+                    </form>
+                </div>
+            {% else %}
+                <div class="tag">
+                    很抱歉，此產品目前沒有存貨。
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if product.cover_image %}
+        <div class="top-section">
+            <div class="cover-image">
+                <img src="{{ product.cover_image.url }}" alt="cover_image" />
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+
+<div class="product-info">
+    <div class="title">
+        產品資訊
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            概覽
+        </div>
+        <div class="attribute">
+            {{ product.description }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            成分
+        </div>
+        <div class="attribute">
+            {{ product.ingredient }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            用途
+        </div>
+        <div class="attribute">
+            {{ product.utility }}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- <h1>{{ product }}</h1>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 <p>{{ product.category }}</p>
 <p>{{ product.utility }}</p>
@@ -16,13 +91,13 @@
     <input type="hidden" name="product_id" value="{{ product.id }}">
     <input type="number" min="1" name="amount" value="1">
     <input type="submit" value="Add to cart">
-</form>
+</form> -->
 
-{% if product.cover_image %}
+<!-- {% if product.cover_image %}
     <img src="{{ product.cover_image.url }}" alt="cover_image" />
 {% endif %}
 {% for image in product.image_set.all %}
     <img src="{{ image.image.url }}" alt="image" />
 {% endfor %}
 
-{% endblock %}
+{% endblock %} -->

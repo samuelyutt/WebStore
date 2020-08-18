@@ -11,7 +11,7 @@ class IndexView(generic.ListView):
     template_name = 'products/index.html'
 
     def get_queryset(self):
-        return Product.objects.all()
+        return Product.objects.filter(is_sellable=True)
 
 class DetailView(generic.DetailView):
     model = Product
