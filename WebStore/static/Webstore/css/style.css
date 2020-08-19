@@ -91,23 +91,25 @@ a, .button {
 }
 
 .page-content {
-    background-color: yellowgreen;
+    /* background-color: yellowgreen; */
     margin: auto;
     width: 100%;
     max-width: 1200px;
 }
 
 .caption {
-    /* padding: 0 8px 0 8px; */
-}
-
-.caption h1 {
     font-size: 28px;
     font-weight: 900;
     color: #444444;
     border: solid;
     border-width: 0 0 1px 0;
     border-color: lightgray;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.caption h1 {
+    
 }
 
 .container {
@@ -120,6 +122,12 @@ a, .button {
     display: flex;
     flex-wrap: wrap;
     justify-content: left;
+}
+
+.container-jcright {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .card {
@@ -191,14 +199,22 @@ a, .button {
     padding: 8px 15px;
     margin: 1px;
     border-radius: 20px;
+    color: black;
+    background-color: lightgray;
+    min-width: 40px;
 }
 
-.add-to-cart {
+.button:hover {
+    color: white;
+    background-color: darkgray;
+}
+
+.add-to-cart  {
     color: orangered;
     background-color: #ffe6d4;
 }
 
-.button:hover {
+.add-to-cart:hover {
     color: #ffe6d4;
     background-color: orangered;
 }
@@ -265,7 +281,7 @@ a, .button {
 }
 
 .product-info .row {
-    padding-top: 20px;
+    padding-top: 30px;
 }
 
 .product-info .attribute-name {
@@ -283,8 +299,61 @@ a, .button {
     text-align: left;
     flex: 1 1 500px;
     line-height: 24px;
-    padding-bottom: 40px;
+    padding-bottom: 30px;
     border: solid;
     border-width: 0 0 1px 0;
     border-color: lightgray;
+}
+
+.product-item {
+    width: 100%;
+    border: solid;
+    border-width: 0 0 1px 0;
+    border-color: lightgray;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.product-item .row {
+}
+
+.product-item .product-name {
+    color: #000;
+    font-size: 22px;
+    text-align: left;
+    flex: 1 1 300px;
+    padding-bottom: 10px;
+}
+
+.product-item .product-name a {
+    color: inherit;
+}
+
+.product-item .product-amount-price {
+    color: #000;
+    font-size: 22px;
+    flex: 1 1 500px;
+    padding-bottom: 10px;
+}
+
+.product-item .product-amount {
+    color: #000;
+    flex: 1 1 200px;
+}
+
+.product-item .product-price {
+    color: #000;
+    flex: 1 1 300px;
+}
+
+.taright {
+    text-align: right !important;
+}
+
+.product-item .function {
+    width: 100%;
+}
+
+.product-item .function .button{
+    min-height: 36px;
 }

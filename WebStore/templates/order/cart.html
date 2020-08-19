@@ -1,6 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="caption"">
+    購物車
+</div>
+
+{% for item in cart_items %}
+    <div class="product-item">
+        <div class="container-jcleft row">
+            <div class="product-name">
+                <a href="{% url 'products:detail' item.product.id %}">{{ item.product }}</a>
+            </div>
+            <div class="product-amount-price taright container-jcleft">
+                <div class="product-amount">
+                    {{ item.amount }}
+                </div>
+                <div class="product-price">
+                    NT$ {{ item.total_amounts }}
+                </div>
+            </div>
+        </div>
+        <div class="container-jcright row function">
+            {% if item.amount < item.product.inventory_quantity %}
+                <form action="{% url 'order:cart_item_edit' %}" method="post">{% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                    <input type="hidden" name="amount" value="1">
+                    <input type="submit" class="button" value="+">
+                </form>    
+            {% elif item.amount > item.product.inventory_quantity %}
+                庫存不足
+            {% endif %}
+            <form action="{% url 'order:cart_item_edit' %}" method="post">{% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <input type="hidden" name="amount" value="-1">
+                <input type="submit" class="button" value="-">
+            </form>
+            <form action="{% url 'order:cart_item_edit' %}" method="post">{% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <input type="hidden" name="amount" value="-{{ item.amount }}">
+                <input type="submit" class="button" value="移除">
+            </form>
+        </div>
+    </div>
+{% endfor %}
+
 <h1>Cart</h1>
 
 <ol>

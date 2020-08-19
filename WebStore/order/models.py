@@ -14,6 +14,9 @@ class CartItem(models.Model):
     def is_valid(self):
         return self.amount <= self.product.inventory_quantity and self.product.is_sellable
 
+    def total_amounts(self):
+        return self.product.unit_price * self.amount
+
 
 class Order(models.Model):
     GENDER_CHOICES = ((0, '先生'), (1, '女士'))
