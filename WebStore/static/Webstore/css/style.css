@@ -308,7 +308,7 @@ a, .button {
 .product-item {
     width: 100%;
     border: solid;
-    border-width: 0 0 1px 0;
+    border-width: 1px 0 0 0;
     border-color: lightgray;
     padding-top: 30px;
     padding-bottom: 30px;
@@ -350,10 +350,100 @@ a, .button {
     text-align: right !important;
 }
 
+.tacenter {
+    text-align: center !important;
+}
+
+.taleft {
+    text-align: left !important;
+}
+
 .product-item .function {
     width: 100%;
 }
 
 .product-item .function .button{
     min-height: 36px;
+}
+
+.message .big-message {
+    padding: 20px 10px;
+    color: #000;
+    font-size: 36px;
+    font-weight: 900;
+}
+
+.message .shipping-fee-message {
+    padding: 0 10px;
+    margin-bottom: 40px;
+    color: #000;
+    font-size: 16px;
+}
+
+.message .function {
+    margin-bottom: 70px;
+    min-width: 190px;
+}
+
+.blue-button  {
+    color: #0077ed;
+    background-color: #f0f6fc;
+}
+
+.blue-button:hover {
+    color: #f0f6fc;
+    background-color: #0077ed;
+}
+
+.create-order  {
+    color: #f0f6fc;
+    background-color: #0077ed;
+    padding-left: 60px;
+    padding-right: 60px;
+    border-radius: 8px;
+}
+
+.create-order:hover {
+    color: #f0f6fc;
+    background-color: #358ee6;
+}
+
+.total {
+    width: 100%;
+    border: solid;
+    border-width: 1px 0 0 0;
+    border-color: lightgray;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: #000;
+    border: solid;
+    border-width: 1px 0 1px 0;
+    border-color: lightgray;
+}
+
+.total .row {
+    padding-bottom: 10px;
+}
+
+.total .total-left {
+    flex: 1 1 200px;
+}
+
+.total .total-right {
+    flex: 1 1 300px;
+    max-width: 500px;
+}
+
+.total .shipping-fee {
+    color: #666666;
+    font-size: 18px;
+}
+
+.total .total-amounts {
+    font-weight: 900;
+    font-size: 26px;
+}
+
+.total .function {
+    padding: 20px 0;
 }

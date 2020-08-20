@@ -16,10 +16,12 @@ from .models import CartItem, OrderItem, Order
 def cart(request):
     context = {}
     context['cart_items'] = request.user.cartitem_set.all()
+    context['total_amounts'] = 60
+
     for item in context['cart_items']:
         if not item.is_valid():
             context['is_not_valid'] = True
-            break
+        context['total_amounts'] += item.total_amounts()
     return render(request, 'order/cart.html', context)
 
 @login_required

@@ -5,6 +5,20 @@
     購物車
 </div>
 
+<div class="message tacenter">
+    <div class="big-message">
+        以下是您購物車中的商品 NT$ {{ total_amounts }}
+    </div>
+    <div class="shipping-fee-message">
+        含運費 NT$ 60
+    </div>
+    <div class="function">
+        {% if not is_not_valid %}
+            <a class="create-order button" href="{% url 'order:create' %}">成立訂單</a>
+        {% endif %}
+    </div>
+</div>
+
 {% for item in cart_items %}
     <div class="product-item">
         <div class="container-jcleft row">
@@ -44,7 +58,34 @@
     </div>
 {% endfor %}
 
-<h1>Cart</h1>
+<div class="total">
+    <div class="container-jcright row shipping-fee">
+        <div class="total-left taright">
+            運費
+        </div>
+        <div class="total-right taright">
+            NT$ 60
+        </div>
+    </div>
+    <div class="container-jcright row total-amounts">
+        <div class="total-left taright">
+            總金額
+        </div>
+        <div class="total-right taright">
+            NT$ {{ total_amounts }}
+        </div>
+    </div>
+    <div class="container-jcright row function">
+        {% if not is_not_valid %}
+            <a class="create-order button" href="{% url 'order:create' %}">成立訂單</a>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+<!-- <h1>Cart</h1>
 
 <ol>
 {% for item in cart_items %}
@@ -77,6 +118,6 @@
 
 {% if not is_not_valid %}
     <a href="{% url 'order:create' %}">Create order</a>
-{% endif %}
+{% endif %} -->
 
 {% endblock %}
