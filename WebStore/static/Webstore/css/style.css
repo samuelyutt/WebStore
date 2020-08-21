@@ -35,6 +35,11 @@ a, .button {
     place-items: center;
 }
 
+.pi-right {
+    display: grid;
+    place-items: self-end;
+}
+
 .shadow-sm {
     -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important; }
@@ -450,3 +455,83 @@ a, .button {
 .total .function {
     padding: 20px 0;
 }
+
+.login-content {
+    width: 100%;
+    height: 80vh;
+    /* background-color: purple; */
+}
+
+.login-card {
+    width: 60%;
+    min-height: 60%;
+    /* background-color: gray; */
+    min-width: 300px;
+    border-style: solid;
+    border-radius: 8px;
+    border-color: lightgray;
+    border-width: 1px;
+    overflow: hidden;
+}
+
+.login-card-block {
+    padding: 40px 20px;
+}
+
+.login-card .login-section {
+    flex: 1 1 300px;
+    background-color: #f7f7f7;
+}
+
+.login-card .create-account {
+    flex: 1 1 200px;
+    /* background-color: green; */
+}
+
+.text-input {
+    margin: 10px 10px 0 10px;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+}
+
+.login-section .text-input {
+    width: 60%;
+    width: 260px
+}
+
+.login-section .button {
+    margin-top: 40px;
+}
+
+.login-card .text {
+    width: 260px;
+    /* max-width: 80%; */
+    margin-bottom: 10px;
+}
+
+.login-card .text .text-caption {
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.login-card .text .message {
+    color: gray;
+}
+
+.create-account .button {
+    padding-left: 60px;
+    padding-right: 60px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 40px;
+}
+
+.error-message {
+    color: #fc2f2f !important;
+}
+
+
+
+

@@ -1,4 +1,39 @@
-<h1>登入</h1>
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="login-content center">
+    <div class="login-card container">
+        <div class="login-card-block login-section center">
+            <form class="center" method="post">{% csrf_token %}
+                <div class="text">
+                    <div class="text-caption">登入</div>
+                    <div class="message">請輸入您的帳號和密碼。</div>
+                    {% if error_message %}<div class="error-message">{{ error_message }}</div>{% endif %}
+                </div>
+                <div>
+                    <input class="text-input" type="text" name="username" required placeholder="電子郵件信箱">
+                </div>
+                <div>
+                    <input class="text-input" type="password" name="password" required placeholder="密碼">
+                </div>
+                <div>
+                    <input class="create-order button" type="submit" value="登入">
+                </div>
+            </form>
+        </div>
+        <div class="login-card-block create-account center">
+            <div class="center">
+                <div class="text">
+                    <div class="text-caption">還沒有帳號嗎？</div>
+                    <div class="message">註冊會員來使用購物車、下達訂單和其他更多功能。</div>
+                </div>
+                <a class="blue-button button" button" href="{% url 'customer_create' %}">註冊</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <h1>登入</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -6,4 +41,7 @@
     <input type="text" name="username" required placeholder="電子郵件信箱">
     <input type="password" name="password" required placeholder="密碼">
     <input type="submit" value="登入">
-</form>
+</form> -->
+
+
+{% endblock %}
