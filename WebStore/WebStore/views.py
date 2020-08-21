@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from administration.models import Settings, UserProfile
+from .forms import CustomerCreateForm
 
 def user_logout(request):
     logout(request)
@@ -35,8 +36,10 @@ def customer_login(request):
 
 def customer_create(request):
     # try:
+    context = {}
     if request.method == 'GET':
-        return render(request, 'auth/customer_form.html')
+        context['form'] = CustomerCreateForm()
+        return render(request, 'auth/customer_form.html', context)
     elif request.method == 'POST':
         context = {}
         context['username'] = request.POST['username']
@@ -50,10 +53,12 @@ def customer_create(request):
         context['contact_phone_no'] = request.POST['contact_phone_no']
 
         if password != password_confirm:
+            context['form'] = CustomerCreateForm(initial=context)
             context['error_message'] = '您輸入的密碼和確認密碼不一致！'
             return render(request, 'auth/customer_form.html', context)
 
         if User.objects.filter(username=context['username']).count() != 0:
+            context['form'] = CustomerCreateForm(initial=context)
             context['error_message'] = '這個帳號已存在！'
             return render(request, 'auth/customer_form.html', context)
 

@@ -1,7 +1,61 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Your Orders</h1>
+
+<div class="caption"">
+    我的訂單
+</div>
+
+<div class="message tacenter">
+    <div class="big-message">
+        以下是您的所有訂單。
+    </div>
+</div>
+
+<div class="product-info">
+    <div class="title">
+        訂單
+    </div>
+    {% for order in object_list %}
+        <div class="product-item">
+            <div class="container-jcleft row">
+                <div class="product-name">
+                    <a href="{% url 'order:detail' order.id %}">Order {{ order.id }}</a>
+                </div>
+                <div class="order-detail taright container-jcleft">
+                    <div class="order-payment">
+                        {{ order.get_payment_display }}
+                    </div>
+                    <div class="order-status">
+                        {% if order.status == 0 %}
+                            請填寫運送資料
+                        {% elif order.status == 1 and not order.remittance_account %}
+                            請填寫匯款帳戶
+                        {% elif order.status == 1 %}
+                            正在核對款項
+                        {% elif order.status == 2 %}
+                            已確認付款
+                        {% elif order.status == 3 %}
+                            已出貨
+                        {% elif order.status == 4 %}
+                            已完成
+                        {% endif %}
+                    </div>
+                    <div class="order-total-amount">
+                        NT$ {{ order.total_amount }}
+                    </div>
+                    <div class="order-view">
+                        <a href="{% url 'order:detail' order.id %}">查看更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+<!-- <h1>Your Orders</h1>
 
 <ol>
 {% for order in object_list %}
@@ -11,4 +65,4 @@
 {% endfor %}
 </ol>
 
-{% endblock %}
+{% endblock %} -->

@@ -5,6 +5,14 @@
     購物車
 </div>
 
+
+{% if not cart_items %}
+<div class="message tacenter">
+    <div class="big-message">
+        您的購物車中沒有商品。
+    </div>
+</div>
+{% else %}
 <div class="message tacenter">
     <div class="big-message">
         以下是您購物車中的商品 NT$ {{ total_amounts }}
@@ -83,7 +91,7 @@
         {% endif %}
     </div>
 </div>
-
+{% endif %}
 
 
 

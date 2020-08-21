@@ -2,12 +2,12 @@
 {% block content %}
 
 <div class="login-content center">
-    <div class="login-card container">
+    <div class="login-card container shadow">
         <div class="login-card-block login-section center">
             <form class="center" method="post">{% csrf_token %}
                 <div class="text">
                     <div class="text-caption">登入</div>
-                    <div class="message">請輸入您的帳號和密碼。</div>
+                    <div class="text-message">請輸入您的帳號和密碼。</div>
                     {% if error_message %}<div class="error-message">{{ error_message }}</div>{% endif %}
                 </div>
                 <div>
@@ -25,9 +25,9 @@
             <div class="center">
                 <div class="text">
                     <div class="text-caption">還沒有帳號嗎？</div>
-                    <div class="message">註冊會員來使用購物車、下達訂單和其他更多功能。</div>
+                    <div class="text-message">立即註冊會員來使用購物車、下達訂單和其他更多功能。</div>
                 </div>
-                <a class="blue-button button" button" href="{% url 'customer_create' %}">註冊</a>
+                <a class="blue-button button" button" href="{% url 'customer_create' %}">註冊會員</a>
             </div>
         </div>
     </div>

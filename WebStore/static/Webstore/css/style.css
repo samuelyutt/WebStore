@@ -2,12 +2,18 @@ html {
     font-family: 'Noto Sans TC', sans-serif;
 }
 
+input {
+    -webkit-appearance: none;  /* Safari 和 Chrome，常用於iOS下移除內建樣式 */
+    -moz-appearance: none;     /* FireFox */
+    appearance: none;
+}
+
 body {
     margin: 0;
 }
 
 header {
-    background-color: coral;
+    /* background-color: coral; */
     min-height: 60px;
     padding: 0 20px;
 }
@@ -57,7 +63,7 @@ a, .button {
     box-shadow: none !important; }
 
 .top-nav {
-    background-color: yellow;
+    /* background-color: yellow; */
     display: flex;
     margin: auto;
     width: 100%;
@@ -139,10 +145,11 @@ a, .button {
     flex: 0 1 376px;
     margin: 12px;
     border-radius: 20px;
-    background: lightpink;
+    /* background: lightpink; */
     height: 450px;
     overflow: hidden;
     position: relative;
+    background-color: #fafafa;
 }
 
 .card:hover {
@@ -171,7 +178,7 @@ a, .button {
 }
 
 .card .card-content {
-    background: lightblue;
+    /* background: lightblue; */
     padding: 10px 18px;
 }
 
@@ -233,7 +240,7 @@ a, .button {
 .top-section .intro {
     padding-right: 18px;
     padding-bottom: 18px;
-    background-color: lightblue;
+    /* background-color: lightblue; */
 }
 
 .top-section .intro .title {
@@ -334,12 +341,12 @@ a, .button {
     padding-bottom: 10px;
 }
 
-.product-item .product-name a {
-    color: inherit;
+.product-item a {
+    color: #0077ed;
 }
 
-.product-item .product-name a:hover {
-    color: #0077ed;
+.product-item a:hover {
+    color: #358ee6;
 }
 
 .product-item .product-amount-price {
@@ -357,6 +364,35 @@ a, .button {
 .product-item .product-price {
     color: #000;
     flex: 1 1 300px;
+}
+
+.product-item .order-detail {
+    color: #000;
+    font-size: 22px;
+    flex: 1 1 800px;
+    padding-bottom: 10px;
+}
+
+.product-item .order-status {
+    color: #000;
+    flex: 1 1 250px;
+    text-align: left;
+}
+
+.product-item .order-payment {
+    color: #000;
+    flex: 1 1 150px;
+    text-align: left;
+}
+
+.product-item .order-total-amount {
+    color: #000;
+    flex: 1 1 150px;
+}
+
+.product-item .order-view {
+    color: #000;
+    flex: 1 1 100px;
 }
 
 .taright {
@@ -379,6 +415,10 @@ a, .button {
     min-height: 36px;
 }
 
+.message {
+    /* padding-bottom: 40px; */
+}
+
 .message .big-message {
     padding: 20px 10px;
     color: #000;
@@ -388,12 +428,12 @@ a, .button {
 
 .message .shipping-fee-message {
     padding: 0 10px;
-    margin-bottom: 40px;
     color: #000;
     font-size: 16px;
 }
 
 .message .function {
+    padding-top: 40px;
     margin-bottom: 70px;
     min-width: 190px;
 }
@@ -496,6 +536,22 @@ a, .button {
     border-radius: 4px;
 }
 
+.attribute input {
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    width: 440px;
+    max-width: 100%;
+}
+
+.attribute select {
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+}
+
 .login-section .text-input {
     width: 60%;
     width: 260px
@@ -516,7 +572,7 @@ a, .button {
     font-weight: 900;
 }
 
-.login-card .text .message {
+.login-card .text .text-message {
     color: gray;
 }
 

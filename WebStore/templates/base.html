@@ -1,6 +1,6 @@
 {% load static %}
 <head>
-    <title>I AM HERE</title>
+    <title>WebStore</title>
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="{% static 'Webstore/css/style.css' %}">
@@ -10,7 +10,7 @@
     <header class="center">
         <div class="top-nav">
             <div class="nav-logo">
-                <img src="https://storage.googleapis.com/image.blocktempo.com/2020/04/Apple_google-partner-on-covid-19-contact-tracing-technology_04102020_inline.jpg.large_.jpg" alt="image" />
+                <a href="{% url 'products:index' %}"><img src="https://i.imgur.com/UxA9D63.jpg" alt="image" /></a>
             </div>
             <div class="nav-non-logo">
                 <div class="nav-item">

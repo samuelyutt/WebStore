@@ -1,4 +1,50 @@
-<h1>註冊</h1>
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="caption"">
+    註冊會員
+</div>
+
+<div class="message tacenter">
+    <div class="big-message">
+        歡迎！
+    </div>
+    <div class="shipping-fee-message">
+        請填寫以下欄位並送出。
+    </div>
+    <div class="shipping-fee-message">
+        * 為必填欄位，若填寫其餘欄位將可以更加快速的完成訂單。
+    </div>
+    {% if error_message %}<div class="shipping-fee-message error-message">{{ error_message }}</div>{% endif %}
+</div>
+
+<div class="product-info">
+    <div class="title">
+        會員資料
+    </div>
+    <form method="post">{% csrf_token %}
+        {% for field in form %}
+            <div class="container-jcleft row">
+                <div class="attribute-name">
+                    {{ field.label_tag }}
+                </div>
+                <div class="attribute">
+                    {{ field }}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="container row">
+            <div>
+                <input class="create-order button" type="submit" value="確認並送出">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+<!-- <h1>註冊</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -43,4 +89,8 @@
         <input type="text" name="contact_phone_no" value="{{ contact_phone_no }}" placeholder="聯絡電話" maxlength="20" id="id_contact_phone_no">
     </p>
     <input type="submit" value="確認">
-</form>
+</form> -->
+
+
+
+{% endblock %}
