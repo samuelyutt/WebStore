@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 
 from products.models import Product
 from .models import CartItem, OrderItem, Order
+from .forms import ShippingDataForm
 
 
 # Create your views here.
@@ -68,7 +69,7 @@ def order_detail(request, order_id):
         
         context['order'] = order
         if order.status in shipping_data_editable_status:
-            context['shipping_data_editable'] = True
+            context['shipping_data_form'] = ShippingDataForm(instance=order)
         if order.status == 1 and order.payment == 0:
             context['remittance_account_editable'] = True
         # context['message'] = '這不是您的訂單，或此訂單不存在。'
@@ -152,32 +153,33 @@ def next_step(request):
 @login_required
 def order_confirm(request):
     # try:
-    shipping_data_editable_status = [0]
-    user = request.user
-    order_id = int(request.POST.get('order_id', 0))
-    order = None
+    if request.method == 'POST':
+        shipping_data_editable_status = [0]
+        user = request.user
+        order_id = int(request.POST.get('order_id', 0))
+        order = None
 
-    try:
-        order = Order.objects.get(id=order_id, user=user)
-    except:
-        return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
-    
-    user_name = request.POST.get('user_name', '')
-    user_gender = request.POST.get('user_gender', 0)
-    user_contact_phone_no = request.POST.get('user_contact_phone_no', '')
-    shipping_postal_code = request.POST.get('shipping_postal_code', '')
-    shipping_address = request.POST.get('shipping_address', '')
+        try:
+            order = Order.objects.get(id=order_id, user=user)
+        except:
+            return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
+        
+        user_name = request.POST.get('user_name', '')
+        user_gender = request.POST.get('user_gender', 0)
+        user_contact_phone_no = request.POST.get('user_contact_phone_no', '')
+        shipping_postal_code = request.POST.get('shipping_postal_code', '')
+        shipping_address = request.POST.get('shipping_address', '')
 
-    if user_name == '' or user_contact_phone_no == '' or shipping_postal_code == '' or shipping_address == '' or order.status not in shipping_data_editable_status:
-        return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
+        if user_name == '' or user_contact_phone_no == '' or shipping_postal_code == '' or shipping_address == '' or order.status not in shipping_data_editable_status:
+            return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
 
-    order.user_name = user_name
-    order.user_gender = user_gender
-    order.user_contact_phone_no = user_contact_phone_no
-    order.shipping_postal_code = shipping_postal_code
-    order.shipping_address = shipping_address
-    order.status = 1
-    order.save()
+        order.user_name = user_name
+        order.user_gender = user_gender
+        order.user_contact_phone_no = user_contact_phone_no
+        order.shipping_postal_code = shipping_postal_code
+        order.shipping_address = shipping_address
+        order.status = 1
+        order.save()
 
     return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
 

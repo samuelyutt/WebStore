@@ -1,38 +1,180 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Order {{ order.id }}</h1>
+<div class="caption"">
+    訂單 {{ order.id }}
+</div>
+
+{% if not order %}
+<div class="message tacenter">
+    <div class="big-message">
+        {{ error_message }}
+    </div>
+</div>
+{% else %}
+<div class="message tacenter">
+    <div class="big-message">
+        {% if shipping_data_form %}
+            感謝您！您的訂單已成立！<br>請填寫運送資料並送出。
+        {% elif remittance_account_editable and not order.remittance_account %}
+            運送資料已送出！<br>當您匯款完成後，請填寫匯款帳戶末五碼。
+        {% elif order.status == 1 %}
+            請稍候！我們會盡快核對款項並出貨！
+        {% elif order.status == 2 %}
+            我們已確認您的付款，將盡快安排出貨！
+        {% elif order.status == 3 %}
+            好消息！您的訂單已出貨！
+        {% elif order.status == 4 %}
+            您的訂單已完成！
+        {% endif %}
+    </div>
+</div>
+
+<div class="product-info">
+    <div class="title">
+        運送資料
+    </div>
+    {% if shipping_data_form %}
+        <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
+            <input class="create-order button" type="submit" value="確認並送出">
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            {% for field in shipping_data_form %}
+                <div class="container-jcleft row">
+                    <div class="attribute-name">
+                        {{ field.label_tag }}
+                    </div>
+                    <div class="attribute">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+        </form>
+    {% else %}
+        <div class="container-jcleft row">
+            <div class="attribute-name">
+                收件人
+            </div>
+            <div class="attribute">
+                {{ order.user_name }}
+            </div>
+        </div>
+        <div class="container-jcleft row">
+            <div class="attribute-name">
+                稱謂
+            </div>
+            <div class="attribute">
+                {{ order.get_user_gender_display }}
+            </div>
+        </div>
+        <div class="container-jcleft row">
+            <div class="attribute-name">
+                聯絡電話
+            </div>
+            <div class="attribute">
+                {{ order.user_contact_phone_no }}
+            </div>
+        </div>
+        <div class="container-jcleft row">
+            <div class="attribute-name">
+                郵遞區號
+            </div>
+            <div class="attribute">
+                {{ order.shipping_postal_code }}
+            </div>
+        </div>
+        <div class="container-jcleft row">
+            <div class="attribute-name">
+                收件地址
+            </div>
+            <div class="attribute">
+                {{order.shipping_address}}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<div class="product-info">
+    <div class="title">
+        付款
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            付款方式
+        </div>
+        <div class="attribute">
+            {{ order.get_payment_display }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            匯款帳號末五碼
+        </div>
+        <div class="attribute">
+            {{ order.remittance_account }}
+            {% if remittance_account_editable %}
+                <a class="create-order button" href="{% url 'order:edit_remittance_account' order.id %}">{% if order.remittance_account %}編輯{% else %}填寫{% endif %}</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="product-info">
+    <div class="title">
+        訂單內容
+    </div>
+    {% for order_item in order.orderitem_set.all %}
+        <div class="product-item">
+            <div class="container-jcleft row">
+                <div class="product-name">
+                    <a href="{% url 'products:detail' order_item.product.id %}">{{ order_item.item_name }}</a>
+                </div>
+                <div class="product-amount-price taright container-jcleft">
+                    <div class="product-amount">
+                        {{ order_item.amount }}
+                    </div>
+                    <div class="product-price">
+                        NT$ {{ order_item.total_amounts }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="total">
+        <div class="container-jcright row shipping-fee">
+            <div class="total-left taright">
+                運費
+            </div>
+            <div class="total-right taright">
+                NT$ 60
+            </div>
+        </div>
+        <div class="container-jcright row total-amounts">
+            <div class="total-left taright">
+                總金額
+            </div>
+            <div class="total-right taright">
+                NT$ {{ order.total_amount }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+<!-- <h1>Order {{ order.id }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 {% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
 {% if order %}
-
-    {% if shipping_data_editable %}
-        <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
-            <input type="hidden" name="order_id" value="{{ order.id }}">
-            <p>
-                <label for="id_user_name">收件人</label>
-                <input type="text" name="user_name" value="{{ order.user_name }}" maxlength="100" required id="id_user_name">
-            </p>
-            <p>
-                <label for="id_user_gender">稱謂</label>
-                <select name="user_gender" id="id_user_gender">
-                    <option value="0" {% if order.user_gender == 0 %}selected{% endif %}>先生</option>
-                    <option value="1" {% if order.user_gender == 1 %}selected{% endif %}>女士</option>
-                </select>
-            </p>
-            <p>
-                <label for="id_user_contact_phone_no">聯絡電話</label>
-                <input type="text" name="user_contact_phone_no" value="{{ order.user_contact_phone_no }}" maxlength="20" required id="id_user_contact_phone_no">
-            </p>
-            <p>
-                <label for="id_shipping_postal_code">郵遞區號</label>
-                <input type="text" name="shipping_postal_code" value="{{ order.shipping_postal_code }}" maxlength="5" required id="id_shipping_postal_code">
-            </p>
-            <p>
-                <label for="id_shipping_address">收件地址</label>
-                <input type="text" name="shipping_address" value="{{ order.shipping_address }}" maxlength="200" required id="id_shipping_address">
-            </p>
+    {% if shipping_data_form %}
+    <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        {% for field in shipping_data_form %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field.label_tag }} {{ field }}
+            </div>
+        {% endfor %}
     {% else %}
             <p>{{ order.user_name }}</p>
             <p>{{ order.get_user_gender_display }}</p>
@@ -62,10 +204,10 @@
     {% endfor %}
     </ol>
 
-    {% if shipping_data_editable %}
+    {% if shipping_data_form %}
         <input type="submit" value="下一步">
     </form>
-    {% endif %}
+    {% endif %} -->
 
 {% endif %}
 

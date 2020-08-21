@@ -28,7 +28,7 @@ class Order(models.Model):
     user_name = models.CharField(max_length=100, verbose_name='收件人')
     user_gender = models.IntegerField(default=0, choices=GENDER_CHOICES, verbose_name='稱謂')
     user_contact_phone_no = models.CharField(max_length=20, verbose_name='聯絡電話')
-    shipping_postal_code = models.CharField(max_length=6, verbose_name='郵遞區號')
+    shipping_postal_code = models.CharField(max_length=5, verbose_name='郵遞區號')
     shipping_address = models.CharField(max_length=200, verbose_name='收件地址')
     shipping_fee = models.IntegerField(default=60, verbose_name='運費')
     total_amount = models.IntegerField(verbose_name='總金額')
@@ -48,3 +48,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(self.item_name) + '(' + str(self.amount) + ')'
+
+    def total_amounts(self):
+        return self.unit_price * self.amount

@@ -305,16 +305,20 @@ a, .button {
     border-color: lightgray;
 }
 
-.product-item {
+.product-items {
     width: 100%;
     border: solid;
     border-width: 1px 0 0 0;
     border-color: lightgray;
-    padding-top: 30px;
-    padding-bottom: 30px;
 }
 
-.product-item .row {
+.product-item {
+    width: 100%;
+    border: solid;
+    border-width: 0 0 1px 0;
+    border-color: lightgray;
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 
 .product-item .product-name {
@@ -327,6 +331,10 @@ a, .button {
 
 .product-item .product-name a {
     color: inherit;
+}
+
+.product-item .product-name a:hover {
+    color: #0077ed;
 }
 
 .product-item .product-amount-price {
@@ -401,6 +409,7 @@ a, .button {
     padding-left: 60px;
     padding-right: 60px;
     border-radius: 8px;
+    font-size: 16px;
 }
 
 .create-order:hover {
@@ -410,15 +419,9 @@ a, .button {
 
 .total {
     width: 100%;
-    border: solid;
-    border-width: 1px 0 0 0;
-    border-color: lightgray;
     padding-top: 30px;
     padding-bottom: 30px;
     color: #000;
-    border: solid;
-    border-width: 1px 0 1px 0;
-    border-color: lightgray;
 }
 
 .total .row {
