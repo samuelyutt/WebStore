@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from administration.models import Settings, UserProfile
-from .forms import CustomerCreateForm
+from .forms import CustomerCreateForm, CustomerUpdateForm, CustomerPasswordUpdateForm
 
 def user_logout(request):
     logout(request)
@@ -41,7 +41,6 @@ def customer_create(request):
         context['form'] = CustomerCreateForm()
         return render(request, 'auth/customer_form.html', context)
     elif request.method == 'POST':
-        context = {}
         context['username'] = request.POST['username']
         password = request.POST['password']
         password_confirm = request.POST['password_confirm']
@@ -88,3 +87,60 @@ def customer_create(request):
     #     context = {}
     #     context
     #     return render(request, 'userprofile/login-page.html', context)
+
+@login_required
+def profile(request):
+    return render(request, 'auth/profile.html')
+
+@login_required
+def profile_update(request):
+    context = {}
+    if request.method == 'GET':
+        originals = {}
+        originals['last_name'] = request.user.last_name
+        originals['first_name'] = request.user.first_name
+        originals['gender'] = request.user.userprofile.gender
+        originals['shipping_postal_code'] = request.user.userprofile.shipping_postal_code
+        originals['shipping_address'] = request.user.userprofile.shipping_address
+        originals['contact_phone_no'] = request.user.userprofile.contact_phone_no
+        context['form'] = CustomerUpdateForm(initial=originals)
+        return render(request, 'auth/profile_form.html', context)
+    elif request.method == 'POST':
+        request.user.last_name = request.POST.get('last_name', request.user.last_name)
+        request.user.first_name = request.POST.get('first_name', request.user.first_name)
+        request.user.userprofile.gender = request.POST.get('gender', request.user.userprofile.gender)
+        request.user.userprofile.shipping_postal_code = request.POST.get('shipping_postal_code', request.user.userprofile.shipping_postal_code)
+        request.user.userprofile.shipping_address = request.POST.get('shipping_address', request.user.userprofile.shipping_address)
+        request.user.userprofile.contact_phone_no = request.POST.get('contact_phone_no', request.user.userprofile.contact_phone_no)
+        request.user.userprofile.save()
+        request.user.save()
+        return HttpResponseRedirect(reverse('profile'))
+
+@login_required
+def password_update(request):
+    context = {}
+    if request.method == 'GET':
+        context['form'] = CustomerPasswordUpdateForm()
+        return render(request, 'auth/password_form.html', context)
+    elif request.method == 'POST':
+        username = request.POST['username']
+        old_password = request.POST['old_password']
+        password = request.POST['password']
+        password_confirm = request.POST['password_confirm']
+
+        if username != request.user.username:
+            context['error_message'] = '請輸入您正確的電子郵件信箱！'
+        elif password != password_confirm:
+            context['error_message'] = '您輸入的密碼和確認密碼不一致！'
+        else:
+            user = authenticate(request, username=username, password=old_password)
+            if user is not None and user.is_active and not user.is_staff:
+                user.set_password(password)
+                user.save()
+                return HttpResponseRedirect(reverse('profile'))
+            context['error_message'] = '您輸入的舊密碼有誤！'
+
+        context['form'] = CustomerPasswordUpdateForm()
+        return render(request, 'auth/password_form.html', context)
+        
+        

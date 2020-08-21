@@ -26,6 +26,9 @@ urlpatterns = [
     path('auth/', views.customer_login, name='customer_login'),
     path('auth/create/', views.customer_create, name='customer_create'),
     path('auth/logout/', views.user_logout, name='logout'),
+    path('auth/me/', views.profile, name='profile'),
+    path('auth/me/update', views.profile_update, name='profile_update'),
+    path('auth/me/update-password', views.password_update, name='password_update'),
     
     path('administration/', include('administration.urls')),
 

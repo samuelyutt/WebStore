@@ -17,6 +17,32 @@ class CustomerCreateForm(forms.Form):
     shipping_address = forms.CharField(label='收件地址', max_length=200, required=False)
     contact_phone_no = forms.CharField(label='聯絡電話', max_length=20, required=False)
 
+class CustomerUpdateForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ''
+
+    GENDER_CHOICES = ((0, '先生'), (1, '女士'))
+
+    last_name = forms.CharField(label='姓 *', max_length=20)
+    first_name = forms.CharField(label='名 *', max_length=40)
+    gender = forms.ChoiceField(choices = GENDER_CHOICES, label='稱謂 *') 
+    shipping_postal_code = forms.CharField(label='郵遞區號', max_length=5, required=False)
+    shipping_address = forms.CharField(label='收件地址', max_length=200, required=False)
+    contact_phone_no = forms.CharField(label='聯絡電話', max_length=20, required=False)
+
+class CustomerPasswordUpdateForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ''
+
+    GENDER_CHOICES = ((0, '先生'), (1, '女士'))
+
+    username = forms.EmailField(label='電子郵件信箱')
+    old_password = forms.password = forms.CharField(label='舊密碼', max_length=64, widget=forms.PasswordInput)
+    password = forms.password = forms.CharField(label='新密碼', min_length=8, max_length=64, widget=forms.PasswordInput)
+    password_confirm = forms.password = forms.CharField(label='確認新密碼', min_length=8, max_length=64, widget=forms.PasswordInput)
+
 
 
 

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="caption"">
+    會員資料
+</div>
+
+{% if not user %}
+<div class="message tacenter">
+    <div class="big-message">
+        {{ error_message }}
+    </div>
+</div>
+{% else %}
+<div class="message tacenter">
+    <div class="big-message">
+        {{ request.user.first_name }}，您好！
+    </div>
+</div>
+
+<div class="product-info">
+    <div class="title">
+        {{ request.user.first_name }}
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            電子郵件信箱
+        </div>
+        <div class="attribute">
+            {{ request.user.email }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            姓
+        </div>
+        <div class="attribute">
+            {{ request.user.last_name }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            名
+        </div>
+        <div class="attribute">
+            {{ request.user.first_name }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            稱謂
+        </div>
+        <div class="attribute">
+            {{ request.user.userprofile.get_gender_display }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            聯絡電話
+        </div>
+        <div class="attribute">
+            {{ request.user.userprofile.contact_phone_no }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            郵遞區號
+        </div>
+        <div class="attribute">
+            {{ request.user.userprofile.shipping_postal_code }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            收件地址
+        </div>
+        <div class="attribute">
+            {{ request.user.userprofile.shipping_address }}
+        </div>
+    </div>
+    <div class="container row">
+        <div>
+            <a class="create-order button" href="{% url 'profile_update' %}">編輯會員資料</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% endif %}
+
+{% endblock %}
