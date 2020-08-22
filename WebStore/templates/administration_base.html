@@ -1,0 +1,24 @@
+{% load static %}
+<head>
+    <title>WebStore Administration</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="{% static 'Webstore/css/style_administration.css' %}">
+    <script src="https://kit.fontawesome.com/dfb9609c56.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="sidebar">
+        <a href="{% url 'administration:products' %}" class="{{ active_products }}">
+            <nav><i class="fas fa-star"></i>產品</nav>
+        </a>
+        <a href="{% url 'administration:orders' %}" class="active {{ active_orders }}">
+            <nav><i class="fas fa-stream"></i>訂單</nav>
+        </a>
+    </div>
+    <div class="page-content">
+        {% block page-content %}
+        {% endblock %}
+    </div>
+</body>

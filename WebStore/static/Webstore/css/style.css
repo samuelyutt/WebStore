@@ -218,6 +218,8 @@ a, .button {
     color: #666666;
     font-size: 20px;
     margin-top: 18px;
+    max-height: 29px;
+    overflow: hidden;
 }
 
 .card .card-content .tag {
@@ -533,11 +535,11 @@ a, .button {
     width: 60%;
     min-height: 60%;
     /* background-color: gray; */
+    border-radius: 20px;
     min-width: 300px;
-    border-style: solid;
-    border-radius: 8px;
+    /* border-style: solid;
     border-color: lightgray;
-    border-width: 1px;
+    border-width: 1px; */
     overflow: hidden;
 }
 

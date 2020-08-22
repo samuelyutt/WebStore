@@ -1,0 +1,104 @@
+html {
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+input {
+    -webkit-appearance: none;  /* Safari 和 Chrome，常用於iOS下移除內建樣式 */
+    -moz-appearance: none;     /* FireFox */
+    appearance: none;
+}
+
+form {
+    margin: 0;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    /* grid-template-columns: minmax(150px, 25%) 1fr; */
+    padding: 0;
+    margin: 0;
+}
+
+a, .button {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+    text-decoration: none !important; }
+    a:hover, a:focus , .button:hover, .button:focus {
+      outline: none !important;
+      -webkit-box-shadow: none;
+      box-shadow: none; }
+
+i {
+    min-width: 30px;
+    padding: 5px;
+}
+
+.center {
+    display: grid;
+    place-items: center;
+}
+
+.pi-right {
+    display: grid;
+    place-items: self-end;
+}
+
+.sidebar {
+    background-color: #073b4c;
+    padding: 20px 0;
+}
+
+.sidebar a {
+    display: block;
+    color: #fff;
+    font-size: 18px;
+    padding: 15px 30px 15px 60px;
+}
+
+.sidebar a:hover {
+    background-color: #116480;
+}
+
+.sidebar a.active {
+    background-color: #c5dfe8;
+    color: #073b4c;
+}
+
+.page-content {
+    padding-left: 15px;
+}
+
+.top-nav {
+    /* background-color: yellow; */
+    display: flex;
+    margin: auto;
+    width: 100%;
+}
+
+.top-nav nav a {
+    border-width: 5px 0 0 0;
+    border-color: #fff;
+    border-style: solid;
+    float: left;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    color: #000;
+    display: block;
+    padding: 12px 30px;
+    background: #fff;
+    line-height: 1.5;
+    min-width: 32px;
+}
+
+.top-nav nav a:hover {
+    color: #548896;
+}
+
+.top-nav nav a.active {
+    color: #118ab2;
+    border-color: #118ab2;
+}
+

@@ -1,3 +1,7 @@
+{% extends 'administration/order_base.html' %}
+{% block content %}
+
+
 <h1>All Orders</h1>
 
 <a href="{% url 'administration:order_create' %}">Add</a>
@@ -29,3 +33,5 @@
     </li>
 {% endfor %}
 </ol>
+
+{% endblock %}
