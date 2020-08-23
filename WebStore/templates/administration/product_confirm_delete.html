@@ -1,4 +1,18 @@
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+{% extends 'administration/product_base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-top-section">
+        <div class="row title">
+            確定要刪除「{{ product }}」嗎？<br>此動作將無法復原。
+        </div>
+        <div class="row function">
+            <form method="post">
+                <input class="button normal-btn" type="submit" value="確認刪除">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

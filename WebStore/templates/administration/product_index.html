@@ -1,4 +1,43 @@
-<h1>All products</h1>
+{% extends 'administration/product_base.html' %}
+{% block content %}
+
+<div>
+    <table class="stripe shadow">
+        <thead>
+            <tr>
+                <th class="first_col">名稱</th>
+                <th>類別</th>
+                <th>單價</th>
+                <th>庫存</th>
+                <th>上架</th>
+                <th class="last_col">動作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in object_list %}
+            <tr>
+                <td class="first_col"><a href="{% url 'products:detail' product.id %}">{{ product }}</a></td>
+                <td>{{ product.category }}</td>
+                <td>NT$ {{ product.unit_price }}</td>
+                <td {% if product.inventory_quantity < 10 %}class="red"{% endif %}>{{ product.inventory_quantity }}</td>
+                <td>{% if product.is_sellable %}是{% else %}否{% endif %}</td>
+                <td class="last_col">
+                    <a class="button normal-btn" href="{% url 'administration:product_update' product.id %}">編輯</a>
+                    <a class="button normal-btn" href="{% url 'administration:product_delete' product.id %}">刪除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+<!-- <h1>All products</h1>
 
 <a href="{% url 'administration:product_create' %}">Add</a>
 <ol>
@@ -9,4 +48,7 @@
         <a href="{% url 'administration:product_delete' product.id %}">Delete</a>
     </li>
 {% endfor %}
-</ol>
+</ol> -->
+
+
+{% endblock %}

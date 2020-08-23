@@ -22,6 +22,12 @@ class ProductIndex(StaffMemberRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Product.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        context['subactive_all'] = 'active'
+        return context
+
 class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
     model = Product
     template_name = 'administration/product_form.html'
@@ -30,10 +36,11 @@ class ProductCreate(StaffMemberRequiredMixin, generic.CreateView):
     def get_success_url(self):
         return reverse('administration:products')
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['activate'] = 'location'
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        context['subactive_create'] = 'active'
+        return context
 
 class ProductUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Product
@@ -42,11 +49,21 @@ class ProductUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     
     def get_success_url(self):
         return reverse('administration:products')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        return context
 
 class ProductDelete(StaffMemberRequiredMixin, generic.DeleteView):
     model = Product
     template_name = 'administration/product_confirm_delete.html'
     success_url = reverse_lazy('administration:products')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        return context
 
 
 ############ ORDER ############
@@ -56,9 +73,20 @@ class OrderIndex(StaffMemberRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Order.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_orders'] = 'active'
+        context['subactive_all'] = 'active'
+        return context
+
 class OrderDetail(StaffMemberRequiredMixin, generic.DetailView):
     model = Order
     template_name = 'administration/order_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_orders'] = 'active'
+        return context
 
 class OrderCreate(StaffMemberRequiredMixin, generic.CreateView):
     model = Order
@@ -68,6 +96,12 @@ class OrderCreate(StaffMemberRequiredMixin, generic.CreateView):
     def get_success_url(self):
         return reverse('administration:orders')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_orders'] = 'active'
+        context['subactive_create'] = 'active'
+        return context
+
 class OrderUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Order
     template_name = 'administration/order_update_form.html'
@@ -75,6 +109,11 @@ class OrderUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     
     def get_success_url(self):
         return reverse('administration:orders')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_orders'] = 'active'
+        return context
 
 # class OrderDelete(StaffMemberRequiredMixin, generic.DeleteView):
 #     model = Order
