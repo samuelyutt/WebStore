@@ -1,4 +1,135 @@
-<h1>Order {{ order.id }}</h1>
+{% extends 'administration/order_base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-top-section">
+        <div class="row title">
+            {{ order }}
+        </div>
+        <div class="row status">
+            {{ order.admin_status_description }}
+        </div>
+        <div class="row function">
+            <form action="{% url 'administration:order_next_step' order.id %}" method="post">{% csrf_token %}
+                <input type="hidden" name="current_page" value="order_detail">
+            {% if order.status == 1 and order.payment == 0 %}
+                {% if order.remittance_account %}
+                <input type="hidden" name="next_status" value="2">
+                <input class="button normal-btn" type="submit" value="確認收到付款">
+                {% endif %}
+            {% elif order.status == 2 %}
+                <input type="hidden" name="next_status" value="3">
+                <input class="button normal-btn" type="submit" value="已出貨">
+            {% elif order.status == 3 %}
+                <input type="hidden" name="next_status" value="4">
+                <input class="button normal-btn" type="submit" value="已完成">
+            {% endif %}
+            </form>
+            <form action="{% url 'administration:order_update' order.id %}" method="get">
+                <input class="button normal-btn" type="submit" value="編輯">
+            </form>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            運送及付款
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                收件人
+            </div>
+            <div class="attribute">
+                {{ order.user_name }} {{ order.get_user_gender_display }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                收件地址
+            </div>
+            <div class="attribute">
+                {{ order.shipping_postal_code }} {{ order.shipping_address }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                付款方式
+            </div>
+            <div class="attribute">
+                {{ order.get_payment_display }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name blue">
+                總金額
+            </div>
+            <div class="attribute blue">
+                NT$ {{ order.total_amount }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name blue">
+                匯款帳號末五碼
+            </div>
+            <div class="attribute blue">
+                {{ order.remittance_account }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                聯絡電話
+            </div>
+            <div class="attribute">
+                {{ order.user_contact_phone_no }}
+            </div>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            訂單內容
+        </div>
+        {% for order_item in order.orderitem_set.all %}
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                <a href="{% url 'products:detail' order_item.product.id %}">{{ order_item.item_name }}</a>
+            </div>
+            <div class="attribute">
+                {{ order_item.amount }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            備註
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                運費
+            </div>
+            <div class="attribute">
+                NT$ {{ order.shipping_fee }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                訂購人電子郵件信箱
+            </div>
+            <div class="attribute">
+                {{ order.user.email }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                訂單成立時間
+            </div>
+            <div class="attribute">
+                {{ order.timestamp }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <h1>Order {{ order.id }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 <p>{{ order.user }}</p>
@@ -40,4 +171,7 @@
     <input type="hidden" name="next_status" value="4">
     <input type="submit" value="已完成">
 {% endif %}
-</form>
+</form> -->
+
+
+{% endblock %}

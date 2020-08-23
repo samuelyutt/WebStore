@@ -63,7 +63,7 @@ class OrderDetail(StaffMemberRequiredMixin, generic.DetailView):
 class OrderCreate(StaffMemberRequiredMixin, generic.CreateView):
     model = Order
     template_name = 'administration/order_form.html'
-    fields = ['user', 'user_name', 'user_gender', 'user_contact_phone_no', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account', 'is_canceled']
+    fields = ['user', 'user_name', 'user_gender', 'user_contact_phone_no', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account']
     
     def get_success_url(self):
         return reverse('administration:orders')
@@ -71,7 +71,7 @@ class OrderCreate(StaffMemberRequiredMixin, generic.CreateView):
 class OrderUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Order
     template_name = 'administration/order_update_form.html'
-    fields = ['user', 'user_name', 'user_gender', 'user_contact_phone_no', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account', 'is_canceled']    
+    fields = ['user', 'user_name', 'user_gender', 'user_contact_phone_no', 'shipping_postal_code', 'shipping_address', 'shipping_fee', 'total_amount', 'status', 'payment', 'remittance_account']    
     
     def get_success_url(self):
         return reverse('administration:orders')

@@ -20,26 +20,14 @@
         <div class="product-item">
             <div class="container-jcleft row">
                 <div class="product-name">
-                    <a href="{% url 'order:detail' order.id %}">Order {{ order.id }}</a>
+                    <a href="{% url 'order:detail' order.id %}">{{ order }}</a>
                 </div>
                 <div class="order-detail taright container-jcleft">
                     <div class="order-payment">
                         {{ order.get_payment_display }}
                     </div>
                     <div class="order-status">
-                        {% if order.status == 0 %}
-                            請填寫運送資料
-                        {% elif order.status == 1 and not order.remittance_account %}
-                            請填寫匯款帳戶
-                        {% elif order.status == 1 %}
-                            正在核對款項
-                        {% elif order.status == 2 %}
-                            已確認付款
-                        {% elif order.status == 3 %}
-                            已出貨
-                        {% elif order.status == 4 %}
-                            已完成
-                        {% endif %}
+                        {{ order.customer_short_status_description }}
                     </div>
                     <div class="order-total-amount">
                         NT$ {{ order.total_amount }}

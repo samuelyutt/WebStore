@@ -39,6 +39,58 @@ class Order(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='成立時間')
 
 
+    def __str__(self):
+        return '訂單 ' + str(self.id)
+
+    def admin_status_description(self):
+        if self.status == 0:
+            return '等待顧客確認運送資料'
+        elif self.status == 1 and self.payment == 0:
+            if self.remittance_account:
+                return '顧客已填寫匯款帳號：' + str(self.remittance_account)
+            else:
+                return '等待顧客填寫匯款帳號'
+        elif self.status == 2:
+            return '已確認收到付款'
+        elif self.status == 3:
+            return '已出貨'
+        else:
+            return self.get_status_display()
+
+    def customer_status_description(self):
+        if self.status == 0:
+            return '感謝您！您的訂單已成立！\n請填寫運送資料並送出。'
+        elif self.status == 1 and self.payment == 0:
+            if self.remittance_account:
+                return '請稍候！我們會盡快核對款項並出貨！'
+            else:
+                return '運送資料已送出！\n當您匯款完成後，請填寫匯款帳戶末五碼。'
+        elif self.status == 2:
+            return '我們已確認您的付款，將盡快安排出貨！'
+        elif self.status == 3:
+            return '好消息！您的訂單已出貨！'
+        elif self.status == 4:
+            return '您的訂單已完成！'
+        else:
+            return self.get_status_display()
+
+    def customer_short_status_description(self):
+        if self.status == 0:
+            return '請填寫運送資料'
+        elif self.status == 1 and self.payment == 0:
+            if self.remittance_account:
+                return '正在核對款項'
+            else:
+                return '請填寫匯款帳戶'
+        elif self.status == 2:
+            return '已確認您的付款'
+        elif self.status == 3:
+            return '已出貨'
+        elif self.status == 4:
+            return '已完成'
+        else:
+            return self.get_status_display()
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     item_name = models.CharField(max_length=200)

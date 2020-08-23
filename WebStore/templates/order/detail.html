@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="caption"">
-    訂單 {{ order.id }}
+    {{ order }}
 </div>
 
 {% if not order %}
@@ -14,19 +14,7 @@
 {% else %}
 <div class="message tacenter">
     <div class="big-message">
-        {% if shipping_data_form %}
-            感謝您！您的訂單已成立！<br>請填寫運送資料並送出。
-        {% elif remittance_account_editable and not order.remittance_account %}
-            運送資料已送出！<br>當您匯款完成後，請填寫匯款帳戶末五碼。
-        {% elif order.status == 1 %}
-            請稍候！我們會盡快核對款項並出貨！
-        {% elif order.status == 2 %}
-            我們已確認您的付款，將盡快安排出貨！
-        {% elif order.status == 3 %}
-            好消息！您的訂單已出貨！
-        {% elif order.status == 4 %}
-            您的訂單已完成！
-        {% endif %}
+        {{ order.customer_status_description }}
     </div>
 </div>
 

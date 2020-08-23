@@ -2,7 +2,54 @@
 {% block content %}
 
 
-<h1>All Orders</h1>
+<div>
+    <table class="stripe shadow">
+        <thead>
+            <tr>
+                <th class="first_col">訂單</th>
+                <th>訂購人</th>
+                <th>金額</th>
+                <th>付款方式</th>
+                <th>狀態</th>
+                <th>描述</th>
+                <th class="last_col">動作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in object_list %}
+            <tr>
+                <td class="first_col"><a href="{% url 'administration:order_detail' order.id %}">{{ order }}</a></td>
+                <td>{{ order.user_name }}</td>
+                <td>NT$ {{ order.total_amount }}</td>
+                <td>{{ order.get_payment_display }}</td>
+                <td>{{ order.get_status_display }}</td>
+                <td>
+                    {{ order.admin_status_description }}
+                </td>
+                <td class="last_col">
+                    {% if order.status == 1 and order.payment == 0 %}
+                        {% if order.remittance_account %}
+                    <input type="hidden" name="next_status" value="2">
+                    <input class="button normal-btn" type="submit" value="確認收到付款">
+                        {% endif %}
+                    {% elif order.status == 2 %}
+                    <input type="hidden" name="next_status" value="3">
+                    <input class="button normal-btn" type="submit" value="已出貨">
+                    {% elif order.status == 3 %}
+                    <input type="hidden" name="next_status" value="4">
+                    <input class="button normal-btn" type="submit" value="已完成">
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<!-- <h1>All Orders</h1>
 
 <a href="{% url 'administration:order_create' %}">Add</a>
 <ol>
@@ -32,6 +79,6 @@
         </form>
     </li>
 {% endfor %}
-</ol>
+</ol> -->
 
 {% endblock %}
