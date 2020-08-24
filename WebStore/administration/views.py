@@ -7,15 +7,75 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .models import Settings
-from products.models import Product
+from products.models import Category, Product
 from order.models import Order
 
 # Create your views here.
-############ PRODUCTS ############
 class StaffMemberRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff
 
+############ CATEGORIES ############
+class CategoryIndex(StaffMemberRequiredMixin, generic.ListView):
+    template_name = 'administration/category_index.html'
+
+    def get_queryset(self):
+        return Category.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        context['subactive_cat_all'] = 'active'
+        return context
+
+class CategoryDetail(StaffMemberRequiredMixin, generic.DetailView):
+    model = Category
+    template_name = 'administration/category_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        return context
+
+class CategoryCreate(StaffMemberRequiredMixin, generic.CreateView):
+    model = Category
+    template_name = 'administration/category_form.html'
+    fields = ['name',]
+    
+    def get_success_url(self):
+        return reverse('administration:categories')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        context['subactive_cat_create'] = 'active'
+        return context
+
+class CategoryUpdate(StaffMemberRequiredMixin, generic.UpdateView):
+    model = Category
+    template_name = 'administration/category_update_form.html'
+    fields = ['name',]
+    
+    def get_success_url(self):
+        return reverse('administration:categories')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        return context
+
+class CategoryDelete(StaffMemberRequiredMixin, generic.DeleteView):
+    model = Category
+    template_name = 'administration/category_confirm_delete.html'
+    success_url = reverse_lazy('administration:categories')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_products'] = 'active'
+        return context
+
+
+############ PRODUCTS ############
 class ProductIndex(StaffMemberRequiredMixin, generic.ListView):
     template_name = 'administration/product_index.html'
 

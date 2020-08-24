@@ -1,0 +1,64 @@
+{% extends 'administration/product_base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-top-section">
+        <div class="row title">
+            {{ category }}
+        </div>
+        <div class="row function">
+            <form action="{% url 'administration:category_update' category.id %}" method="get">
+                <input class="button normal-btn" type="submit" value="編輯">
+            </form>
+            <form action="{% url 'administration:category_delete' category.id %}" method="get">
+                <input class="button normal-btn" type="submit" value="刪除">
+            </form>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            內容
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                產品數量
+            </div>
+            <div class="attribute">
+                {{ category.product_set.all.count }} 種產品
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <table class="stripe shadow">
+        <thead>
+            <tr>
+                <th class="first_col">名稱</th>
+                <th>類別</th>
+                <th>單價</th>
+                <th>庫存</th>
+                <th>上架</th>
+                <th class="last_col">動作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in category.product_set.all %}
+            <tr>
+                <td class="first_col"><a href="{% url 'products:detail' product.id %}">{{ product }}</a></td>
+                <td>{{ product.category }}</td>
+                <td>NT$ {{ product.unit_price }}</td>
+                <td {% if product.inventory_quantity < 10 %}class="red"{% endif %}>{{ product.inventory_quantity }}</td>
+                <td>{% if product.is_sellable %}是{% else %}否{% endif %}</td>
+                <td class="last_col">
+                    <a class="button normal-btn" href="{% url 'administration:product_update' product.id %}">編輯</a>
+                    <a class="button normal-btn" href="{% url 'administration:product_delete' product.id %}">刪除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

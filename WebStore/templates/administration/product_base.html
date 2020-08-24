@@ -8,6 +8,12 @@
     <nav>
         <a href="{% url 'administration:product_create' %}" class="{{ subactive_create }}">新增產品</a>
     </nav>
+    <nav>
+        <a href="{% url 'administration:categories' %}" class="{{ subactive_cat_all }}">所有類別</a>
+    </nav>
+    <nav>
+        <a href="{% url 'administration:category_create' %}" class="{{ subactive_cat_create }}">新增類別</a>
+    </nav>
 </div>
 
 <div class="content">

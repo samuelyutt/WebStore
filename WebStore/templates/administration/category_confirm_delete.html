@@ -4,7 +4,9 @@
 <div class="card">
     <div class="card-top-section">
         <div class="row title">
-            確定要刪除「{{ product }}」嗎？<br>此動作將無法復原。
+            確定要刪除「{{ category }}」嗎？<br>
+            此動作將無法復原。<br>
+            請注意：所有「{{ category }}」產品也都會被刪除。
         </div>
         <div class="row function">
             <form method="post">{% csrf_token %}

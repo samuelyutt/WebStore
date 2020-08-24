@@ -1,0 +1,33 @@
+{% extends 'administration/product_base.html' %}
+{% block content %}
+
+<div>
+    <table class="stripe shadow">
+        <thead>
+            <tr>
+                <th class="first_col">類別</th>
+                <th class="">產品數量</th>
+                <th class="last_col">動作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in object_list %}
+            <tr>
+                <td class="first_col">
+                    <a class="" href="{% url 'administration:category_detail' category.id %}">{{ category }}</a>
+                </td>
+                <td>
+                    {{ category.product_set.all.count }}
+                </td>
+                <td class="last_col">
+                    <a class="button normal-btn" href="{% url 'administration:category_update' category.id %}">編輯</a>
+                    <a class="button normal-btn" href="{% url 'administration:category_delete' category.id %}">刪除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
