@@ -1,0 +1,36 @@
+{% extends 'administration/configuration_base.html' %}
+{% block content %}
+
+
+<div class="card">
+    <div class="card-top-section">
+        <div class="row title">
+            設定
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            編輯設定
+        </div>
+        <div>
+            <form method="post">{% csrf_token %}
+                {% for field in form %}
+                <div class="container-jcleft row">
+                    <div class="attribute-name">
+                        {{ field.label }}
+                    </div>
+                    <div class="attribute">
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="container-jcleft row">
+                    <input class="button normal-btn" type="submit" value="修改並儲存">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

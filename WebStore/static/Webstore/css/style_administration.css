@@ -275,6 +275,20 @@ tr .last_col {
     flex: 1 1 500px;
 }
 
+.attribute .logo {
+    overflow: hidden;
+}
+
+.attribute .small-logo {
+    max-height: 80px;
+    width: auto;
+}
+
+.attribute .large-logo {
+    max-height: 160px;
+    width: auto;
+}
+
 a, .button {
     -webkit-transition: .3s all ease;
     -o-transition: .3s all ease;

@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from .models import Settings
+from .models import Configuration
 from products.models import Category, Product
 from order.models import Order
 
@@ -14,6 +14,37 @@ from order.models import Order
 class StaffMemberRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff
+
+############ CONFIGURATION ############
+class ConfigurationDetail(StaffMemberRequiredMixin, generic.DetailView):
+    model = Configuration
+    template_name = 'administration/configuration_detail.html'
+
+    def get_object(self):
+        return Configuration.objects.first()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_configuration'] = 'active'
+        context['subactive_configuration'] = 'active'
+        return context
+
+class ConfigurationUpdate(StaffMemberRequiredMixin, generic.UpdateView):
+    model = Configuration
+    template_name = 'administration/configuration_update_form.html'
+    fields = ['site_name', 'is_visitable', 'site_logo_small', 'site_logo_large', 'is_sellable', 'manager_bank_code', 'manager_bank_name', 'manager_receiving_account', 'shipping_fee', 'manager_name', 'manager_contact_phone_no', 'manager_email', 'manager_address']
+
+    def get_object(self):
+        return Configuration.objects.first()
+    
+    def get_success_url(self):
+        return reverse('administration:configuration')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_configuration'] = 'active'
+        context['subactive_configuration'] = 'active'
+        return context
 
 ############ CATEGORIES ############
 class CategoryIndex(StaffMemberRequiredMixin, generic.ListView):

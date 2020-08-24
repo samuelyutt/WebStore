@@ -1,0 +1,145 @@
+{% extends 'administration/configuration_base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-top-section">
+        <div class="row title">
+            設定
+        </div>
+        <div class="row status">
+            
+        </div>
+        <div class="row function">
+            <form action="{% url 'administration:configuration_update' %}" method="get">
+                <input class="button normal-btn" type="submit" value="編輯">
+            </form>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            網站
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                網站名稱
+            </div>
+            <div class="attribute">
+                {{ configuration.site_name }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                允許造訪網站
+            </div>
+            <div class="attribute">
+                {% if configuration.is_visitable %}是{% else %}否{% endif %}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                網站Logo（小)
+            </div>
+            <div class="attribute">
+                <img class="logo small-logo" src="{{ configuration.site_logo_small.url }}" alt="site_logo_small" />
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                網站Logo（大)
+            </div>
+            <div class="attribute">
+                <img class="logo large-logo" src="{{ configuration.site_logo_large.url }}" alt="site_logo_large" />
+            </div>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            訂單及收款
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                允許顧客成立訂單
+            </div>
+            <div class="attribute">
+                {% if configuration.is_sellable %}是{% else %}否{% endif %}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                收款銀行
+            </div>
+            <div class="attribute">
+                {{ configuration.manager_bank_code }} {{ configuration.manager_bank_name }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                收款帳號
+            </div>
+            <div class="attribute">
+                {{ configuration.manager_receiving_account }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                每筆訂單運費
+            </div>
+            <div class="attribute">
+                {{ configuration.shipping_fee }}
+            </div>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            網站管理員
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                管理員姓名
+            </div>
+            <div class="attribute">
+                {{ configuration.manager_name }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                管理員聯絡電話
+            </div>
+            <div class="attribute">
+                {{ configuration.manager_contact_phone_no }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                管理員電子郵件信箱
+            </div>
+            <div class="attribute">
+                {{ configuration.manager_email }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                管理員地址
+            </div>
+            <div class="attribute">
+                {{ configuration.manager_address }}
+            </div>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            其他
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                權利聲明
+            </div>
+            <div class="attribute">
+                {{ configuration.copyright_info }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

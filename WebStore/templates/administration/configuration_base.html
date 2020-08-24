@@ -1,0 +1,15 @@
+{% extends 'administration_base.html' %}
+{% block page-content %}
+
+<div class="top-nav">
+    <nav>
+        <a href="{% url 'administration:configuration' %}" class="{{ subactive_configuration }}">設定</a>
+    </nav>
+</div>
+
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+{% endblock %}

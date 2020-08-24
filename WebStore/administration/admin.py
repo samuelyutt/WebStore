@@ -2,10 +2,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.contrib import admin
 
-from .models import Settings, UserProfile
+from .models import Configuration, UserProfile
 
 # Register your models here.
-class SettingsAdmin(admin.ModelAdmin):
+class ConfigurationAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'is_visitable', 'is_sellable', 'manager_email', 'manager_name')
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -18,7 +18,7 @@ class UserProfileInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = (UserProfileInline,)
 
-admin.site.register(Settings, SettingsAdmin)
+admin.site.register(Configuration, ConfigurationAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

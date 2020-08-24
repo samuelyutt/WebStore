@@ -4,6 +4,8 @@ from . import views
 
 app_name = 'administration'
 urlpatterns = [
+    path('configuration/', views.ConfigurationDetail.as_view(), name='configuration'),
+    path('configuration/update/', views.ConfigurationUpdate.as_view(), name='configuration_update'),
     path('product/', views.ProductIndex.as_view(), name='products'),
     path('product/create/', views.ProductCreate.as_view(), name='product_create'),
     path('product/<int:pk>/update/', views.ProductUpdate.as_view(), name='product_update'),

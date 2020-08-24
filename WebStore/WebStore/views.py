@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from administration.models import Settings, UserProfile
+from administration.models import Configuration, UserProfile
 from .forms import CustomerCreateForm, CustomerUpdateForm, CustomerPasswordUpdateForm
 
 def user_logout(request):
