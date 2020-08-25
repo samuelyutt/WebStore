@@ -16,17 +16,18 @@ def user_logout(request):
 
 def user_login(request):
     # try:
+    context = {}
+    context['config'] = Configuration.objects.first()
     if request.method == 'GET':
         if request.user.is_authenticated:
             return HttpResponseRedirect(request.GET.get('next', reverse('products:index'))) #home
-        return render(request, 'auth/login.html')
+        return render(request, 'auth/login.html', context)
     elif request.method == 'POST':
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
         if user is not None and user.is_active:
             login(request, user)
             return HttpResponseRedirect(request.GET.get('next', reverse('products:index'))) #home
         else:
-            context = {}
             context['error_message'] = '您輸入的電子郵件信箱或密碼有誤，或是您尚未建立帳號！'
             return render(request, 'auth/login.html', context)
     # except:
@@ -37,6 +38,7 @@ def user_login(request):
 def customer_create(request):
     # try:
     context = {}
+    context['config'] = Configuration.objects.first()
     if request.method == 'GET':
         context['form'] = CustomerCreateForm()
         return render(request, 'auth/customer_form.html', context)
@@ -90,11 +92,14 @@ def customer_create(request):
 
 @login_required
 def profile(request):
-    return render(request, 'auth/profile.html')
+    context = {}
+    context['config'] = Configuration.objects.first()
+    return render(request, 'auth/profile.html', context)
 
 @login_required
 def profile_update(request):
     context = {}
+    context['config'] = Configuration.objects.first()
     if request.method == 'GET':
         originals = {}
         originals['last_name'] = request.user.last_name
@@ -119,6 +124,7 @@ def profile_update(request):
 @login_required
 def password_update(request):
     context = {}
+    context['config'] = Configuration.objects.first()
     if request.method == 'GET':
         context['form'] = CustomerPasswordUpdateForm()
         return render(request, 'auth/password_form.html', context)
@@ -129,7 +135,7 @@ def password_update(request):
         password_confirm = request.POST['password_confirm']
 
         if username != request.user.username:
-            context['error_message'] = '請輸入您正確的電子郵件信箱！'
+            context['error_message'] = '為了您的帳號安全，請輸入您正確的電子郵件信箱！'
         elif password != password_confirm:
             context['error_message'] = '您輸入的密碼和確認密碼不一致！'
         else:
