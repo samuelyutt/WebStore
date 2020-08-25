@@ -42,6 +42,12 @@ class Order(models.Model):
     def __str__(self):
         return '訂單 ' + str(self.id)
 
+    def cal_total_amounts(self):
+        total_amounts = self.shipping_fee
+        for item in self.orderitem_set.all():
+            total_amounts += item.total_amounts()
+        return total_amounts if total_amounts > 0 else 0
+
     def admin_status_description(self):
         if self.status == 0:
             return '等待顧客確認運送資料'

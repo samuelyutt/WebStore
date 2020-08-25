@@ -10,14 +10,16 @@ from django.contrib.auth.models import User
 from products.models import Product
 from .models import CartItem, OrderItem, Order
 from .forms import ShippingDataForm
+from administration.models import Configuration
 
 
 # Create your views here.
 @login_required
 def cart(request):
     context = {}
+    context['config'] = Configuration.objects.first()
     context['cart_items'] = request.user.cartitem_set.all()
-    context['total_amounts'] = 60
+    context['total_amounts'] = context['config'].shipping_fee
 
     for item in context['cart_items']:
         if not item.is_valid():
@@ -49,40 +51,48 @@ def cart_item_edit(request, product_id=0):
         return HttpResponseRedirect(reverse('products:index')) #home
 
 class IndexView(LoginRequiredMixin, generic.ListView):
+    model = Order
     template_name = 'order/index.html'
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return reversed(Order.objects.filter(user=self.request.user))
 
-@login_required
-def order_detail(request, order_id):
-    try:
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['config'] = Configuration.objects.first()
+        return context
+
+class DetailView(LoginRequiredMixin, generic.DetailView):
+    model = Order
+    template_name = 'order/detail.html'
+
+    def get_object(self):
+        order = super(DetailView, self).get_object()
+        if order.user != self.request.user:
+            raise Http404
+        return order
+
+    def get_context_data(self, **kwargs):
         shipping_data_editable_status = [0]
-        context = {}
-        user = request.user
 
-        try:
-            order = Order.objects.get(id=order_id, user=user)
-        except:
-            context['error_message'] = '這不是您的訂單，或此訂單不存在。'
-            return render(request, 'order/detail.html', context)
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context['config'] = Configuration.objects.first()
         
-        context['order'] = order
+        order = super(DetailView, self).get_object()
         if order.status in shipping_data_editable_status:
             context['shipping_data_form'] = ShippingDataForm(instance=order)
         if order.status == 1 and order.payment == 0:
             context['remittance_account_editable'] = True
-        # context['message'] = '這不是您的訂單，或此訂單不存在。'
-        return render(request, 'order/detail.html', context)
-    except:
-        return HttpResponseRedirect(reverse('products:index')) #home
+        return context
 
 @login_required
 def order_create(request):
     # try:
+    context = {}
+    context['config'] = Configuration.objects.first()
     user = request.user
     cart_items = user.cartitem_set.all()
-    shipping_fee = 60
+    shipping_fee = context['config'].shipping_fee
 
     if cart_items:
         for cart_item in cart_items:
@@ -117,12 +127,11 @@ def order_create(request):
             order_item.save()
             cart_item.product.inventory_quantity -= order_item.amount
             cart_item.product.save()
-            order.total_amount += order_item.unit_price * order_item.amount if order_item.amount > 0 else 0
 
         for cart_item in cart_items:
             cart_item.delete()
 
-        order.total_amount += shipping_fee if shipping_fee > 0 else 0
+        order.total_amount = order.cal_total_amounts()
         order.save()
         return HttpResponseRedirect(reverse('order:detail', args=[order.id]))
     else:
@@ -191,11 +200,15 @@ class EditRemittanceAccount(LoginRequiredMixin, generic.UpdateView):
     template_name = 'order/remittance_account_update_form.html'
     fields = ['remittance_account']
 
-    def get_context_data(self, **kwargs):
-        context = super(EditRemittanceAccount, self).get_context_data(**kwargs)
-        order = self.object
+    def get_object(self):
+        order = super(EditRemittanceAccount, self).get_object()
         if order.user != self.request.user or order.status != 1:
             raise Http404
+        return order
+        
+    def get_context_data(self, **kwargs):
+        context = super(EditRemittanceAccount, self).get_context_data(**kwargs)
+        context['config'] = Configuration.objects.first()
         return context
         
     def get_success_url(self):

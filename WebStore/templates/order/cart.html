@@ -18,7 +18,7 @@
         以下是您購物車中的商品 NT$ {{ total_amounts }}
     </div>
     <div class="shipping-fee-message">
-        含運費 NT$ 60
+        含運費 NT$ {{ config.shipping_fee }}
     </div>
     <div class="function">
         {% if not is_not_valid %}
@@ -74,7 +74,7 @@
             運費
         </div>
         <div class="total-right taright">
-            NT$ 60
+            NT$ {{ config.shipping_fee }}
         </div>
     </div>
     <div class="container-jcright row total-amounts">
