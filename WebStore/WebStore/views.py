@@ -14,21 +14,21 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('products:index')) #home
 
-def customer_login(request):
+def user_login(request):
     # try:
     if request.method == 'GET':
         if request.user.is_authenticated:
             return HttpResponseRedirect(request.GET.get('next', reverse('products:index'))) #home
-        return render(request, 'auth/customer_login.html')
+        return render(request, 'auth/login.html')
     elif request.method == 'POST':
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-        if user is not None and user.is_active and not user.is_staff:
+        if user is not None and user.is_active:
             login(request, user)
             return HttpResponseRedirect(request.GET.get('next', reverse('products:index'))) #home
         else:
             context = {}
             context['error_message'] = '您輸入的電子郵件信箱或密碼有誤，或是您尚未建立帳號！'
-            return render(request, 'auth/customer_login.html', context)
+            return render(request, 'auth/login.html', context)
     # except:
     #     context = {}
     #     context

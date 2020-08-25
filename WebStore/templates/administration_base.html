@@ -19,6 +19,12 @@
         <a href="{% url 'administration:configuration' %}" class="{{ active_configuration }}">
             <nav><i class="fas fa-cog"></i>設定</nav>
         </a>
+        <a href="{% url 'products:index' %}" class="">
+            <nav><i class="fas fa-chevron-circle-right"></i>造訪網站</nav>
+        </a>
+        <a href="{% url 'logout' %}" class="">
+            <nav><i class="fas fa-sign-out-alt"></i>登出</nav>
+        </a>
     </div>
     <div class="page-content">
         {% block page-content %}
