@@ -158,7 +158,6 @@ def next_step(request):
     return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
     #except:
 
-
 @login_required
 def order_confirm(request):
     # try:
