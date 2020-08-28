@@ -13,7 +13,7 @@
             編輯設定
         </div>
         <div>
-            <form method="post">{% csrf_token %}
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
                 {% for field in form %}
                 <div class="container-jcleft row">
                     <div class="attribute-name">

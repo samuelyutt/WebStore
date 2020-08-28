@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .models import Configuration
 from products.models import Category, Product
-from order.models import Order
+from order.models import Order, Promo
 
 # Create your views here.
 class StaffMemberRequiredMixin(UserPassesTestMixin):
@@ -159,6 +159,7 @@ class ProductDelete(StaffMemberRequiredMixin, generic.DeleteView):
 
 ############ ORDER ############
 class OrderIndex(StaffMemberRequiredMixin, generic.ListView):
+    model = Order
     template_name = 'administration/order_index.html'
 
     def get_queryset(self):
@@ -231,3 +232,90 @@ def order_next_step(request, order_id):
             return HttpResponseRedirect(reverse('administration:orders'))
     except:
         return HttpResponseRedirect(reverse('products:index')) #home
+
+
+class PromoIndex(StaffMemberRequiredMixin, generic.ListView):
+    model = Promo
+    template_name = 'administration/promo_index.html'
+
+    def get_queryset(self):
+        return reversed(Promo.objects.all())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_promo'] = 'active'
+        context['subactive_all'] = 'active'
+        return context
+
+class PromoDetail(StaffMemberRequiredMixin, generic.DetailView):
+    model = Promo
+    template_name = 'administration/promo_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_promo'] = 'active'
+        return context
+
+class PromoCreate(StaffMemberRequiredMixin, generic.CreateView):
+    model = Promo
+    template_name = 'administration/promo_form.html'
+    fields = ['code', 'discount_type', 'has_total_amount_limit', 'has_total_count_limit', 'has_time_limit']
+    
+    def get_success_url(self):
+        return reverse('administration:promo_content_update', args=[self.object.id])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_promo'] = 'active'
+        context['subactive_create'] = 'active'
+        return context
+
+class PromoTypeUpdate(StaffMemberRequiredMixin, generic.UpdateView):
+    model = Promo
+    template_name = 'administration/promo_update_form.html'
+    fields = ['code', 'discount_type', 'has_total_amount_limit', 'has_total_count_limit', 'has_time_limit']
+    
+    def get_success_url(self):
+        return reverse('administration:promo_content_update', args=[self.object.id])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_promo'] = 'active'
+        context['next'] = '下一步'
+        return context
+
+class PromoContentUpdate(StaffMemberRequiredMixin, generic.UpdateView):
+    model = Promo
+    template_name = 'administration/promo_update_form.html'
+    fields = []    
+    
+    def get_success_url(self):
+        return reverse('administration:promos')
+
+    def dispatch(self, request, *args, **kwargs):
+        promo = super().get_object()
+        self.fields = []
+        
+        # Discount Type
+        if promo.discount_type == 0:
+            self.fields += ['discount_amount']
+        elif promo.discount_type == 1:
+            self.fields += ['discount_ratio', 'discount_limit']
+
+        # Limitations
+        if promo.has_total_amount_limit == 1:
+            self.fields += ['total_amount_limit']
+
+        if promo.has_total_count_limit == 1:
+            self.fields += ['total_count_limit']
+
+        if promo.has_time_limit == 1:
+            self.fields += ['time_limit_start', 'time_limit_expire']
+        
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_promo'] = 'active'
+        context['next'] = '完成'
+        return context

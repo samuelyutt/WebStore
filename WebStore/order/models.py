@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.conf import settings
 from products.models import Product
@@ -109,3 +110,60 @@ class OrderItem(models.Model):
 
     def total_amounts(self):
         return self.unit_price * self.amount
+
+
+class Promo(models.Model):
+    DISCOUNT_TYPE_CHOICES = ((0, '總金額折價'), (1, '總金額打折'), (2, '免運費'))
+    HAS_LIMIT_CHOICES = ((0, '無'), (1, '有'))
+
+    code = models.CharField(max_length=32, unique=True, verbose_name='優惠代碼')
+    
+    # Discount Type
+    discount_type = models.IntegerField(default=0, choices=DISCOUNT_TYPE_CHOICES, verbose_name='優惠類型')
+    discount_amount = models.IntegerField(default=0, verbose_name='折價金額')
+    discount_ratio = models.DecimalField(default=0.9, max_digits=3, decimal_places=2, verbose_name='打折（比例）')
+    discount_limit = models.IntegerField(default=100, verbose_name='最高折價上限')
+    
+    # Limitations
+    has_total_amount_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='消費滿額才可用限制')
+    total_amount_limit = models.IntegerField(default=0, verbose_name='消費滿此金額可用')
+    
+    has_total_count_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='數量限制')
+    total_count_limit = models.IntegerField(default=10, verbose_name='剩餘數量')
+    
+    has_time_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='使用時間限制')
+    time_limit_start = models.DateTimeField(default=datetime.now, verbose_name='開始有效時間')
+    time_limit_expire = models.DateTimeField(default=datetime.now, verbose_name='截止有效時間')
+    
+    def __str__(self):
+        return str(self.code)
+
+    def usage_description(self):
+        ret = ''
+        if self.has_total_amount_limit == 1:
+            ret += '總金額滿NT$ ' + str(self.total_amount_limit)
+        else:
+            ret += '不限消費金額'
+
+        if self.discount_type == 0:
+            ret += '折' + str(self.discount_amount)
+        elif self.discount_type == 1:
+            ret += '打折（總金額 * ' + str(self.discount_ratio) + ')'
+            ret += '，折抵金額上限 NT$ ' + str(self.discount_limit)
+        elif self.discount_type == 2:
+            ret += '免運費'
+        
+        ret += '，使用期限'
+        if self.has_time_limit == 1:
+            ret += '自' + str(self.time_limit_start) + '至' + str(self.time_limit_expire) + '止'
+        else:
+            ret += '無限制'
+
+        ret += '，剩餘數量：'
+        if self.has_time_limit == 1:
+            ret += str(self.total_count_limit) + '張'
+        else:
+            ret += '無限制'
+
+        ret += '。'
+        return ret

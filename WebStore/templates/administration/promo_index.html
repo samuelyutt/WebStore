@@ -1,0 +1,26 @@
+{% extends 'administration/promo_base.html' %}
+{% block content %}
+
+
+<div>
+    <table class="stripe shadow">
+        <thead>
+            <tr>
+                <th class="first_col">優惠代碼</th>
+                <th>優惠類型</th>
+                <th class="last_col">時間限制類型</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for promo in object_list %}
+            <tr>
+                <td class="first_col"><a href="{% url 'administration:promo_detail' promo.id %}">{{ promo }}</a></td>
+                <td>{{ promo.total_amount_limit_type }}</td>
+                <td class="last_col">{{ promo.time_limit_type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

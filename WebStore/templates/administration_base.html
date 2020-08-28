@@ -16,10 +16,13 @@
         <a href="{% url 'administration:orders' %}" class="{{ active_orders }}">
             <nav><i class="fas fa-stream"></i>訂單</nav>
         </a>
+        <a href="{% url 'administration:promos' %}" class="{{ active_promo }}">
+            <nav><i class="fas fa-tag"></i>優惠碼</nav>
+        </a>
         <a href="{% url 'administration:configuration' %}" class="{{ active_configuration }}">
             <nav><i class="fas fa-cog"></i>設定</nav>
         </a>
-        <a href="{% url 'products:index' %}" class="">
+        <a href="{% url 'products:index' %}" target="_blank" class="">
             <nav><i class="fas fa-chevron-circle-right"></i>造訪網站</nav>
         </a>
         <a href="{% url 'logout' %}" class="">

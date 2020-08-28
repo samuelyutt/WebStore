@@ -22,5 +22,11 @@ urlpatterns = [
     path('order/create/', views.OrderCreate.as_view(), name='order_create'),
     path('order/<int:pk>/', views.OrderDetail.as_view(), name='order_detail'),
     path('order/<int:pk>/update/', views.OrderUpdate.as_view(), name='order_update'),
-    path('order/<int:order_id>/next_step/', views.order_next_step, name='order_next_step'),
+    path('order/<int:order_id>/next-step/', views.order_next_step, name='order_next_step'),
+
+    path('promo/', views.PromoIndex.as_view(), name='promos'),
+    path('promo/create/', views.PromoCreate.as_view(), name='promo_create'),
+    path('promo/<int:pk>/', views.PromoDetail.as_view(), name='promo_detail'),
+    path('promo/<int:pk>/update-type/', views.PromoTypeUpdate.as_view(), name='promo_type_update'),
+    path('promo/<int:pk>/update-content/', views.PromoContentUpdate.as_view(), name='promo_content_update'),
 ]

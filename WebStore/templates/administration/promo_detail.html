@@ -1,0 +1,36 @@
+{% extends 'administration/promo_base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-top-section">
+        <div class="row title">
+            {{ promo }}
+        </div>
+        <div class="row status">
+            {{ promo.usage_description }}
+        </div>
+        <div class="row function">
+            
+            </form>
+            <form action="{% url 'administration:promo_type_update' promo.id %}" method="get">
+                <input class="button normal-btn" type="submit" value="編輯">
+            </form>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            優惠內容
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                優惠代碼
+            </div>
+            <div class="attribute">
+                {{ promo.code }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
