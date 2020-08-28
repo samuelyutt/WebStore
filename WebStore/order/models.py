@@ -139,31 +139,47 @@ class Promo(models.Model):
         return str(self.code)
 
     def usage_description(self):
-        ret = ''
-        if self.has_total_amount_limit == 1:
-            ret += '總金額滿NT$ ' + str(self.total_amount_limit)
-        else:
-            ret += '不限消費金額'
+        return self.total_amount_limit_description() + \
+               self.discount_type_description() + \
+               self.time_limit_description() + \
+               self.total_count_limit_description()
 
+    def discount_type_description(self):
+        ratio_digits1 = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+        ratio_digits2 = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+        ret = ''
         if self.discount_type == 0:
-            ret += '折' + str(self.discount_amount)
+            ret += '消費金額折' + str(self.discount_amount)
         elif self.discount_type == 1:
-            ret += '打折（總金額 * ' + str(self.discount_ratio) + ')'
-            ret += '，折抵金額上限 NT$ ' + str(self.discount_limit)
+            discount_str = str(self.discount_ratio)
+            ratio_str = ratio_digits1[int(discount_str[2])] + ratio_digits2[int(discount_str[3])] + '折'
+            ret += '消費金額' + ratio_str
+            ret += '，折抵金額上限NT$ ' + str(self.discount_limit)
+            print(str(self.discount_ratio)[2])
         elif self.discount_type == 2:
             ret += '免運費'
-        
-        ret += '，使用期限'
+        return ret + '。'
+
+    def total_amount_limit_description(self):
+        ret = ''
+        if self.has_total_amount_limit == 1:
+            ret += '消費金額滿NT$ ' + str(self.total_amount_limit)
+        else:
+            ret += '不限消費金額'
+        return ret + '可使用。'
+
+    def time_limit_description(self):
+        ret = '使用期限'
         if self.has_time_limit == 1:
             ret += '自' + str(self.time_limit_start) + '至' + str(self.time_limit_expire) + '止'
         else:
             ret += '無限制'
+        return ret + '。'
 
-        ret += '，剩餘數量：'
-        if self.has_time_limit == 1:
+    def total_count_limit_description(self):
+        ret = '剩餘數量：'
+        if self.has_total_count_limit == 1:
             ret += str(self.total_count_limit) + '張'
         else:
             ret += '無限制'
-
-        ret += '。'
-        return ret
+        return ret + '。'
