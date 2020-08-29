@@ -499,6 +499,7 @@ a, .button {
 }
 
 .total .row {
+    padding-top: 10px;
     padding-bottom: 10px;
 }
 
@@ -509,6 +510,16 @@ a, .button {
 .total .total-right {
     flex: 1 1 300px;
     max-width: 500px;
+}
+
+.total .subtotal {
+    color: #666666;
+    font-size: 18px;
+}
+
+.total .promo {
+    color: #1ced00;
+    font-size: 18px;
 }
 
 .total .shipping-fee {

@@ -19,6 +19,78 @@ class CartItem(models.Model):
         return self.product.unit_price * self.amount
 
 
+class Promo(models.Model):
+    DISCOUNT_TYPE_CHOICES = ((0, '總金額折價'), (1, '總金額打折'), (2, '免運費'))
+    HAS_LIMIT_CHOICES = ((0, '無'), (1, '有'))
+
+    code = models.CharField(max_length=32, unique=True, verbose_name='優惠代碼')
+    
+    # Discount Type
+    discount_type = models.IntegerField(default=0, choices=DISCOUNT_TYPE_CHOICES, verbose_name='優惠類型')
+    discount_amount = models.IntegerField(default=0, verbose_name='折價金額')
+    discount_ratio = models.DecimalField(default=0.9, max_digits=3, decimal_places=2, verbose_name='打折（比例）')
+    discount_limit = models.IntegerField(default=100, verbose_name='最高折價上限')
+    
+    # Limitations
+    has_total_amount_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='消費滿額才可用限制')
+    total_amount_limit = models.IntegerField(default=0, verbose_name='消費滿此金額可用')
+    
+    has_total_count_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='數量限制')
+    total_count_limit = models.IntegerField(default=10, verbose_name='剩餘數量')
+    
+    has_time_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='使用時間限制')
+    time_limit_start = models.DateTimeField(default=datetime.now, verbose_name='開始有效時間')
+    time_limit_expire = models.DateTimeField(default=datetime.now, verbose_name='截止有效時間')
+    
+    def __str__(self):
+        return str(self.code)
+
+    def usage_description(self):
+        return self.total_amount_limit_description() + \
+               self.discount_type_description() + \
+               self.time_limit_description() + \
+               self.total_count_limit_description()
+
+    def discount_type_description(self):
+        ret = ''
+        if self.discount_type == 0:
+            ret += '消費金額折' + str(self.discount_amount)
+        elif self.discount_type == 1:
+            ratio_digits1 = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+            ratio_digits2 = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+            discount_str = str(self.discount_ratio)
+            ratio_str = ratio_digits1[int(discount_str[2])] + ratio_digits2[int(discount_str[3])] + '折'
+            ret += '消費金額' + ratio_str
+            ret += '，折抵金額上限NT$ ' + str(self.discount_limit)
+            print(str(self.discount_ratio)[2])
+        elif self.discount_type == 2:
+            ret += '免運費'
+        return ret + '。'
+
+    def total_amount_limit_description(self):
+        ret = ''
+        if self.has_total_amount_limit == 1:
+            ret += '消費金額滿NT$ ' + str(self.total_amount_limit)
+        else:
+            ret += '不限消費金額'
+        return ret + '可使用。'
+
+    def time_limit_description(self):
+        ret = '使用期限'
+        if self.has_time_limit == 1:
+            ret += '自' + str(self.time_limit_start) + '至' + str(self.time_limit_expire) + '止'
+        else:
+            ret += '無限制'
+        return ret + '。'
+
+    def total_count_limit_description(self):
+        ret = '剩餘數量：'
+        if self.has_total_count_limit == 1:
+            ret += str(self.total_count_limit)
+        else:
+            ret += '無限制'
+        return ret + '。'
+
 class Order(models.Model):
     GENDER_CHOICES = ((0, '先生'), (1, '女士'))
     STATUS_CHOICES = ((0, '已初始'), (1, '已成立'), (2, '已確認收到付款'), (3, '已出貨'), (4, '已完成'),
@@ -38,15 +110,23 @@ class Order(models.Model):
     remittance_account = models.CharField(blank=True, max_length=5, verbose_name='匯款帳號末五碼')
     is_canceled = models.BooleanField(default=False, verbose_name='已取消')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='成立時間')
+    promo = models.ForeignKey(Promo, null=True, on_delete=models.SET_NULL, verbose_name='優惠碼')
+    promo_code = models.CharField(max_length=32, null=True, verbose_name='優惠代碼')
+    discount = models.IntegerField(default=0, verbose_name='優惠')
 
 
     def __str__(self):
         return '訂單 ' + str(self.id)
 
+    def cal_subtotal(self):
+        subtotal = 0
+        for item in self.orderitem_set.all():
+            subtotal += item.total_amounts()
+        return subtotal
+
     def cal_total_amounts(self):
         total_amounts = self.shipping_fee
-        for item in self.orderitem_set.all():
-            total_amounts += item.total_amounts()
+        total_amounts += self.cal_subtotal()
         return total_amounts if total_amounts > 0 else 0
 
     def admin_status_description(self):
@@ -110,76 +190,3 @@ class OrderItem(models.Model):
 
     def total_amounts(self):
         return self.unit_price * self.amount
-
-
-class Promo(models.Model):
-    DISCOUNT_TYPE_CHOICES = ((0, '總金額折價'), (1, '總金額打折'), (2, '免運費'))
-    HAS_LIMIT_CHOICES = ((0, '無'), (1, '有'))
-
-    code = models.CharField(max_length=32, unique=True, verbose_name='優惠代碼')
-    
-    # Discount Type
-    discount_type = models.IntegerField(default=0, choices=DISCOUNT_TYPE_CHOICES, verbose_name='優惠類型')
-    discount_amount = models.IntegerField(default=0, verbose_name='折價金額')
-    discount_ratio = models.DecimalField(default=0.9, max_digits=3, decimal_places=2, verbose_name='打折（比例）')
-    discount_limit = models.IntegerField(default=100, verbose_name='最高折價上限')
-    
-    # Limitations
-    has_total_amount_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='消費滿額才可用限制')
-    total_amount_limit = models.IntegerField(default=0, verbose_name='消費滿此金額可用')
-    
-    has_total_count_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='數量限制')
-    total_count_limit = models.IntegerField(default=10, verbose_name='剩餘數量')
-    
-    has_time_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='使用時間限制')
-    time_limit_start = models.DateTimeField(default=datetime.now, verbose_name='開始有效時間')
-    time_limit_expire = models.DateTimeField(default=datetime.now, verbose_name='截止有效時間')
-    
-    def __str__(self):
-        return str(self.code)
-
-    def usage_description(self):
-        return self.total_amount_limit_description() + \
-               self.discount_type_description() + \
-               self.time_limit_description() + \
-               self.total_count_limit_description()
-
-    def discount_type_description(self):
-        ratio_digits1 = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
-        ratio_digits2 = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九']
-        ret = ''
-        if self.discount_type == 0:
-            ret += '消費金額折' + str(self.discount_amount)
-        elif self.discount_type == 1:
-            discount_str = str(self.discount_ratio)
-            ratio_str = ratio_digits1[int(discount_str[2])] + ratio_digits2[int(discount_str[3])] + '折'
-            ret += '消費金額' + ratio_str
-            ret += '，折抵金額上限NT$ ' + str(self.discount_limit)
-            print(str(self.discount_ratio)[2])
-        elif self.discount_type == 2:
-            ret += '免運費'
-        return ret + '。'
-
-    def total_amount_limit_description(self):
-        ret = ''
-        if self.has_total_amount_limit == 1:
-            ret += '消費金額滿NT$ ' + str(self.total_amount_limit)
-        else:
-            ret += '不限消費金額'
-        return ret + '可使用。'
-
-    def time_limit_description(self):
-        ret = '使用期限'
-        if self.has_time_limit == 1:
-            ret += '自' + str(self.time_limit_start) + '至' + str(self.time_limit_expire) + '止'
-        else:
-            ret += '無限制'
-        return ret + '。'
-
-    def total_count_limit_description(self):
-        ret = '剩餘數量：'
-        if self.has_total_count_limit == 1:
-            ret += str(self.total_count_limit) + '張'
-        else:
-            ret += '無限制'
-        return ret + '。'

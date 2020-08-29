@@ -7,7 +7,7 @@
             {{ promo }}
         </div>
         <div class="row status">
-            {{ promo.usage_description }}
+            {{ promo.discount_type_description }}
         </div>
         <div class="row function">
             
@@ -19,7 +19,7 @@
     </div>
     <div class="card-section">
         <div class="row sub-title">
-            優惠內容
+            內容
         </div>
         <div class="row container-jcleft">
             <div class="attribute-name">
@@ -27,6 +27,43 @@
             </div>
             <div class="attribute">
                 {{ promo.code }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                優惠內容
+            </div>
+            <div class="attribute">
+                {{ promo.discount_type_description }}
+            </div>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="row sub-title">
+            使用條件
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                滿額條件
+            </div>
+            <div class="attribute">
+                {{ promo.total_amount_limit_description }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                時間限制
+            </div>
+            <div class="attribute">
+                {{ promo.time_limit_description }}
+            </div>
+        </div>
+        <div class="row container-jcleft">
+            <div class="attribute-name">
+                剩餘數量
+            </div>
+            <div class="attribute">
+                {{ promo.total_count_limit_description }}
             </div>
         </div>
     </div>

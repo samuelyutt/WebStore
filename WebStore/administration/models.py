@@ -15,8 +15,10 @@ class Configuration(models.Model):
     manager_address = models.CharField(max_length=200, verbose_name='管理員地址')
     manager_bank_name = models.CharField(max_length=20, verbose_name='收款銀行名稱')
     manager_bank_code = models.CharField(max_length=5, verbose_name='收款銀行代碼')
+    manager_receiving_account_name = models.CharField(max_length=30, verbose_name='收款帳戶名稱')
     manager_receiving_account = models.CharField(max_length=30, verbose_name='收款帳號')
     shipping_fee = models.IntegerField(default=60, verbose_name='每筆訂單運費')
+    discount_shipping_fee = models.IntegerField(default=2000, verbose_name='滿此金額免運費')
     copyright_info = models.CharField(max_length=200, verbose_name='權利聲明')
 
 class UserProfile(models.Model):

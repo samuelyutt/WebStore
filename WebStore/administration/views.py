@@ -32,7 +32,7 @@ class ConfigurationDetail(StaffMemberRequiredMixin, generic.DetailView):
 class ConfigurationUpdate(StaffMemberRequiredMixin, generic.UpdateView):
     model = Configuration
     template_name = 'administration/configuration_update_form.html'
-    fields = ['site_name', 'is_visitable', 'site_logo_small', 'site_logo_large', 'is_sellable', 'manager_bank_code', 'manager_bank_name', 'manager_receiving_account', 'shipping_fee', 'manager_name', 'manager_contact_phone_no', 'manager_email', 'manager_address']
+    fields = ['site_name', 'is_visitable', 'site_logo_small', 'site_logo_large', 'is_sellable', 'manager_bank_code', 'manager_bank_name', 'manager_receiving_account_name', 'manager_receiving_account', 'shipping_fee', 'discount_shipping_fee', 'manager_name', 'manager_contact_phone_no', 'manager_email', 'manager_address']
 
     def get_object(self):
         return Configuration.objects.first()

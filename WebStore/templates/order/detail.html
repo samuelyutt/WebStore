@@ -18,66 +18,90 @@
     </div>
 </div>
 
+{% if remittance_account_editable %}
+<div class="product-info">
+    <div class="title">
+        收款帳號
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            帳戶名稱
+        </div>
+        <div class="attribute">
+            {{ config.manager_receiving_account_name }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            銀行及代碼
+        </div>
+        <div class="attribute">
+            {{config.manager_bank_code}} {{ config.manager_bank_name }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            帳號
+        </div>
+        <div class="attribute">
+            {{ config.manager_receiving_account }}
+        </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            說明
+        </div>
+        <div class="attribute">
+           請將NT$ {{ order.total_amount }}匯款至此帳戶。如您已匯款，請至下方填寫您的匯款帳戶末五碼，我們會儘速確認。
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="product-info">
     <div class="title">
         運送資料
     </div>
     {% if shipping_data_form %}
-        <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
-            <input class="create-order button" type="submit" value="確認並送出">
-            <input type="hidden" name="order_id" value="{{ order.id }}">
-            {% for field in shipping_data_form %}
-                <div class="container-jcleft row">
-                    <div class="attribute-name">
-                        {{ field.label }}
-                    </div>
-                    <div class="attribute">
-                        {{ field }}
-                    </div>
-                </div>
-            {% endfor %}
-        </form>
+    <form action="{% url 'order:next_step' %}" method="post">{% csrf_token %}
+        <input class="create-order button" type="submit" value="確認並送出">
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        {% for field in shipping_data_form %}
+        <div class="container-jcleft row">
+            <div class="attribute-name">
+                {{ field.label }}
+            </div>
+            <div class="attribute">
+                {{ field }}
+            </div>
+        </div>
+        {% endfor %}
+    </form>
     {% else %}
-        <div class="container-jcleft row">
-            <div class="attribute-name">
-                收件人
-            </div>
-            <div class="attribute">
-                {{ order.user_name }}
-            </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            收件人
         </div>
-        <div class="container-jcleft row">
-            <div class="attribute-name">
-                稱謂
-            </div>
-            <div class="attribute">
-                {{ order.get_user_gender_display }}
-            </div>
+        <div class="attribute">
+            {{ order.user_name }} {{ order.get_user_gender_display }}
         </div>
-        <div class="container-jcleft row">
-            <div class="attribute-name">
-                聯絡電話
-            </div>
-            <div class="attribute">
-                {{ order.user_contact_phone_no }}
-            </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            聯絡電話
         </div>
-        <div class="container-jcleft row">
-            <div class="attribute-name">
-                郵遞區號
-            </div>
-            <div class="attribute">
-                {{ order.shipping_postal_code }}
-            </div>
+        <div class="attribute">
+            {{ order.user_contact_phone_no }}
         </div>
-        <div class="container-jcleft row">
-            <div class="attribute-name">
-                收件地址
-            </div>
-            <div class="attribute">
-                {{order.shipping_address}}
-            </div>
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            收件地址
         </div>
+        <div class="attribute">
+            {{ order.shipping_postal_code }} {{order.shipping_address}}
+        </div>
+    </div>
     {% endif %}
 </div>
 
@@ -100,7 +124,7 @@
         <div class="attribute">
             {{ order.remittance_account }}
             {% if remittance_account_editable %}
-                <a class="create-order button" href="{% url 'order:edit_remittance_account' order.id %}">{% if order.remittance_account %}編輯{% else %}填寫{% endif %}</a>
+            <a class="create-order button" href="{% url 'order:edit_remittance_account' order.id %}">{% if order.remittance_account %}編輯{% else %}填寫{% endif %}</a>
             {% endif %}
         </div>
     </div>
@@ -111,29 +135,45 @@
         訂單內容
     </div>
     {% for order_item in order.orderitem_set.all %}
-        <div class="product-item">
-            <div class="container-jcleft row">
-                <div class="product-name">
-                    <a href="{% url 'products:detail' order_item.product.id %}">{{ order_item.item_name }}</a>
+    <div class="product-item">
+        <div class="container-jcleft row">
+            <div class="product-name">
+                <a href="{% url 'products:detail' order_item.product.id %}">{{ order_item.item_name }}</a>
+            </div>
+            <div class="product-amount-price taright container-jcleft">
+                <div class="product-amount">
+                    {{ order_item.amount }}
                 </div>
-                <div class="product-amount-price taright container-jcleft">
-                    <div class="product-amount">
-                        {{ order_item.amount }}
-                    </div>
-                    <div class="product-price">
-                        NT$ {{ order_item.total_amounts }}
-                    </div>
+                <div class="product-price">
+                    NT$ {{ order_item.total_amounts }}
                 </div>
             </div>
         </div>
+    </div>
     {% endfor %}
     <div class="total">
+        <div class="container-jcright row subtotal">
+            <div class="total-left taright">
+                小計
+            </div>
+            <div class="total-right taright">
+                NT$ {{ order.cal_subtotal }}
+            </div>
+        </div>
         <div class="container-jcright row shipping-fee">
             <div class="total-left taright">
                 運費
             </div>
             <div class="total-right taright">
                 NT$ {{ order.shipping_fee }}
+            </div>
+        </div>
+        <div class="container-jcright row promo">
+            <div class="total-left taright">
+                優惠
+            </div>
+            <div class="total-right taright">
+                -NT$ 23
             </div>
         </div>
         <div class="container-jcright row total-amounts">
