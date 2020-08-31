@@ -13,4 +13,6 @@ urlpatterns = [
     path('create/', views.order_create, name='create'),
     path('next-step/', views.next_step, name='next_step'),
     path('<int:pk>/edit-remittance-account/', views.EditRemittanceAccount.as_view(), name='edit_remittance_account'),
+    path('<int:order_id>/promo-apply/', views.promo_apply, name='promo_apply'),
+    path('<int:order_id>/promo-remove/', views.promo_remove, name='promo_remove'),
 ]

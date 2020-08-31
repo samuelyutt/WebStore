@@ -18,6 +18,24 @@
     </div>
 </div>
 
+{% if promo_editable %}
+<div class="product-info">
+    <div class="title">
+        優惠
+    </div>
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            優惠代碼
+        </div>
+        <div class="attribute">
+            {% if order.promo_code %}{{ order.promo_code }}{% endif %}
+            <a class="create-order button" href="{% url 'order:promo_apply' order.id %}">{% if order.promo_code %}更改{% else %}填寫{% endif %}</a>
+            {% if order.promo_code %}<a class="create-order button" href="{% url 'order:promo_remove' order.id %}">移除</a>{% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% if remittance_account_editable %}
 <div class="product-info">
     <div class="title">
@@ -128,6 +146,17 @@
             {% endif %}
         </div>
     </div>
+    {% if order.promo_code %}
+    <div class="container-jcleft row">
+        <div class="attribute-name">
+            優惠代碼
+        </div>
+        <div class="attribute">
+            {{ order.promo_code }}：
+            {% if order.promo %}{{ order.promo.discount_type_description }}{% endif %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 <div class="product-info">
@@ -160,22 +189,28 @@
                 NT$ {{ order.cal_subtotal }}
             </div>
         </div>
-        <div class="container-jcright row shipping-fee">
+        <div class="container-jcright row shipping-fee {% if order.shipping_fee == 0 %}promo{% endif %}">
             <div class="total-left taright">
                 運費
             </div>
             <div class="total-right taright">
+                {% if order.shipping_fee == 0 %}
+                此筆訂單免運費
+                {% else %}
                 NT$ {{ order.shipping_fee }}
+                {% endif %}
             </div>
         </div>
+        {% if order.discount != 0 %}
         <div class="container-jcright row promo">
             <div class="total-left taright">
                 優惠
             </div>
             <div class="total-right taright">
-                -NT$ 23
+                -NT$ {{order.discount}}
             </div>
         </div>
+        {% endif %}
         <div class="container-jcright row total-amounts">
             <div class="total-left taright">
                 總金額

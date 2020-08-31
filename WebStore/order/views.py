@@ -8,8 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
 from products.models import Product
-from .models import CartItem, OrderItem, Order
-from .forms import ShippingDataForm
+from .models import CartItem, OrderItem, Order, Promo
+from .forms import ShippingDataForm, PromoCodeForm
 from administration.models import Configuration
 
 
@@ -19,12 +19,19 @@ def cart(request):
     context = {}
     context['config'] = Configuration.objects.first()
     context['cart_items'] = request.user.cartitem_set.all()
-    context['total_amounts'] = context['config'].shipping_fee
+    context['total_amounts'] = 0
 
     for item in context['cart_items']:
         if not item.is_valid():
             context['is_not_valid'] = True
         context['total_amounts'] += item.total_amounts()
+
+    if context['total_amounts'] < context['config'].discount_shipping_fee:
+        context['total_amounts'] += context['config'].shipping_fee
+        context['shipping_fee'] = context['config'].shipping_fee
+    else:
+        context['shipping_fee'] = 0
+    
     return render(request, 'order/cart.html', context)
 
 @login_required
@@ -74,6 +81,7 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         shipping_data_editable_status = [0]
+        promo_editable_status = [0]
 
         context = super(DetailView, self).get_context_data(**kwargs)
         context['config'] = Configuration.objects.first()
@@ -83,6 +91,11 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
             context['shipping_data_form'] = ShippingDataForm(instance=order)
         if order.status == 1 and order.payment == 0:
             context['remittance_account_editable'] = True
+        if order.status in promo_editable_status:
+            context['promo_editable'] = True
+            context['promo_show'] = True
+        elif order.promo is not None:
+            context['promo_show'] = True
         return context
 
 @login_required
@@ -92,7 +105,6 @@ def order_create(request):
     context['config'] = Configuration.objects.first()
     user = request.user
     cart_items = user.cartitem_set.all()
-    shipping_fee = context['config'].shipping_fee
 
     if cart_items:
         for cart_item in cart_items:
@@ -109,7 +121,6 @@ def order_create(request):
             user_contact_phone_no=user.userprofile.contact_phone_no,
             shipping_postal_code=user.userprofile.shipping_postal_code,
             shipping_address=user.userprofile.shipping_address,
-            shipping_fee=shipping_fee,
             total_amount=0,
             status=0,
             payment=0,
@@ -131,6 +142,7 @@ def order_create(request):
         for cart_item in cart_items:
             cart_item.delete()
 
+        order.shipping_fee = order.cal_shipping_fee()
         order.total_amount = order.cal_total_amounts()
         order.save()
         return HttpResponseRedirect(reverse('order:detail', args=[order.id]))
@@ -140,15 +152,26 @@ def order_create(request):
     #     return HttpResponseRedirect(reverse('products:index')) #home
 
 @login_required
+def get_order(request, order_id):
+    try:
+        return Order.objects.get(id=order_id, user=request.user)
+    except:
+        return None
+
+@login_required
+def get_promo(request, promo_code):
+    try:
+        return Promo.objects.get(code=promo_code)
+    except:
+        return None
+
+@login_required
 def next_step(request):
     #try:
-    user = request.user
     order_id = int(request.POST.get('order_id', 0))
-    order = None
+    order = get_order(request, order_id)
 
-    try:
-        order = Order.objects.get(id=order_id, user=user)
-    except:
+    if order is None:
         return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
 
     status = order.status
@@ -163,13 +186,10 @@ def order_confirm(request):
     # try:
     if request.method == 'POST':
         shipping_data_editable_status = [0]
-        user = request.user
         order_id = int(request.POST.get('order_id', 0))
-        order = None
+        order = get_order(request, order_id)
 
-        try:
-            order = Order.objects.get(id=order_id, user=user)
-        except:
+        if order is None:
             return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
         
         user_name = request.POST.get('user_name', '')
@@ -212,3 +232,35 @@ class EditRemittanceAccount(LoginRequiredMixin, generic.UpdateView):
         
     def get_success_url(self):
         return reverse('order:detail', args=[self.object.id])
+
+@login_required
+def promo_apply(request, order_id):
+    context = {}
+    context['config'] = Configuration.objects.first()
+
+    order = get_order(request, order_id)
+
+    if order is None or order.status != 0:
+        return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
+
+    if request.method == 'GET':
+        context['form'] = PromoCodeForm()
+        return render(request, 'order/promo_update_form.html', context)
+    elif request.method == 'POST':
+        promo_code = request.POST.get('promo_code', '')
+        promo = get_promo(request, promo_code)
+
+        if promo is None or not order.can_use(promo):
+            context['error_message'] = '無法使用此優惠。'
+            context['form'] = PromoCodeForm()
+            return render(request, 'order/promo_update_form.html', context)
+
+        order.apply_promo(promo)
+        return HttpResponseRedirect(reverse('order:detail', args=[order_id]))
+
+@login_required
+def promo_remove(request, order_id):
+    order = get_order(request, order_id)
+    if order is not None:
+        order.remove_promo()
+    return HttpResponseRedirect(reverse('order:detail', args=[order_id]))

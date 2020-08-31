@@ -2,6 +2,9 @@ from datetime import datetime
 from django.db import models
 from django.conf import settings
 from products.models import Product
+from administration.models import Configuration
+from django.utils import timezone
+
 
 # Create your models here.
 class CartItem(models.Model):
@@ -24,6 +27,7 @@ class Promo(models.Model):
     HAS_LIMIT_CHOICES = ((0, '無'), (1, '有'))
 
     code = models.CharField(max_length=32, unique=True, verbose_name='優惠代碼')
+    used_count = models.IntegerField(default=0, verbose_name='使用次數')
     
     # Discount Type
     discount_type = models.IntegerField(default=0, choices=DISCOUNT_TYPE_CHOICES, verbose_name='優惠類型')
@@ -35,12 +39,12 @@ class Promo(models.Model):
     has_total_amount_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='消費滿額才可用限制')
     total_amount_limit = models.IntegerField(default=0, verbose_name='消費滿此金額可用')
     
-    has_total_count_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='數量限制')
-    total_count_limit = models.IntegerField(default=10, verbose_name='剩餘數量')
+    has_total_count_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='使用次數限制')
+    total_count_limit = models.IntegerField(default=10, verbose_name='剩餘使用次數')
     
     has_time_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='使用時間限制')
-    time_limit_start = models.DateTimeField(default=datetime.now, verbose_name='開始有效時間')
-    time_limit_expire = models.DateTimeField(default=datetime.now, verbose_name='截止有效時間')
+    time_limit_start = models.DateTimeField(default=timezone.now(), verbose_name='開始有效時間')
+    time_limit_expire = models.DateTimeField(default=timezone.now(), verbose_name='截止有效時間')
     
     def __str__(self):
         return str(self.code)
@@ -54,7 +58,7 @@ class Promo(models.Model):
     def discount_type_description(self):
         ret = ''
         if self.discount_type == 0:
-            ret += '消費金額折' + str(self.discount_amount)
+            ret += '消費金額折扣 NT$' + str(self.discount_amount)
         elif self.discount_type == 1:
             ratio_digits1 = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
             ratio_digits2 = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九']
@@ -84,12 +88,12 @@ class Promo(models.Model):
         return ret + '。'
 
     def total_count_limit_description(self):
-        ret = '剩餘數量：'
+        ret = ''
         if self.has_total_count_limit == 1:
             ret += str(self.total_count_limit)
         else:
             ret += '無限制'
-        return ret + '。'
+        return ret
 
 class Order(models.Model):
     GENDER_CHOICES = ((0, '先生'), (1, '女士'))
@@ -118,6 +122,14 @@ class Order(models.Model):
     def __str__(self):
         return '訂單 ' + str(self.id)
 
+    def cal_shipping_fee(self):
+        config = Configuration.objects.first()
+        discount_shipping_fee = config.discount_shipping_fee
+        if self.cal_subtotal() < discount_shipping_fee:
+            return config.shipping_fee
+        else:
+            return 0
+
     def cal_subtotal(self):
         subtotal = 0
         for item in self.orderitem_set.all():
@@ -127,7 +139,64 @@ class Order(models.Model):
     def cal_total_amounts(self):
         total_amounts = self.shipping_fee
         total_amounts += self.cal_subtotal()
+        total_amounts -= self.discount
         return total_amounts if total_amounts > 0 else 0
+
+    def can_use(self, promo):
+        if promo.has_total_amount_limit == 1:
+            if self.cal_subtotal() < promo.total_amount_limit:
+                return False
+
+        if promo.has_time_limit == 1:
+            now = timezone.now()
+            if not (promo.time_limit_start <= now <= promo.time_limit_expire):
+                return False
+
+        if promo.has_total_count_limit == 1:
+            if promo.total_count_limit <= 0:
+                return False
+
+        return True
+
+    def apply_promo(self, promo):
+        if self.promo is not None:
+            self.remove_promo()
+        
+        subtotal = self.cal_subtotal()
+        self.promo = promo
+        self.promo_code = promo.code
+        if promo.discount_type == 0:
+            self.discount = promo.discount_amount
+            self.discount = subtotal if self.discount > subtotal else self.discount
+        elif promo.discount_type == 1:
+            self.discount = self.cal_subtotal() * (1 - promo.discount_ratio)
+            self.discount = promo.discount_limit if self.discount > promo.discount_limit else self.discount
+            self.discount = subtotal if self.discount > subtotal else self.discount
+        elif promo.discount_type == 2:
+            self.shipping_fee = 0
+        self.total_amount = self.cal_total_amounts()
+        self.save()
+
+        promo.used_count += 1
+        promo.total_count_limit -= 1
+        promo.save()
+    
+    def remove_promo(self):
+        self.promo.used_count -= 1
+        self.promo.total_count_limit += 1
+
+        if self.promo.discount_type == 0:
+            self.discount = 0
+        elif self.promo.discount_type == 1:
+            self.discount = 0
+        elif self.promo.discount_type == 2:
+            self.shipping_fee = self.cal_shipping_fee()
+        self.promo.save()
+        self.promo = None
+        self.promo_code = None
+        self.total_amount = self.cal_total_amounts()
+        self.save()
+
 
     def admin_status_description(self):
         if self.status == 0:

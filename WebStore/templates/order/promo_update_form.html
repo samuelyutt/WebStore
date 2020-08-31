@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="caption"">
+    訂單 {{ order.id }}
+</div>
+
+<div class="message tacenter">
+    <div class="big-message">
+        請填寫優惠代碼。
+    </div>
+    <div class="shipping-fee-message">
+        {{ error_message }}
+    </div>
+</div>
+
+<div class="product-info">
+    <div class="title">
+        優惠代碼
+    </div>
+    <form method="post">{% csrf_token %}
+        {% for field in form %}
+            <div class="container-jcleft row">
+                <div class="attribute-name">
+                    {{ field.label }}
+                </div>
+                <div class="attribute">
+                    {{ field }}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="container row">
+            <div>
+                <input class="create-order button" type="submit" value="確定使用">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+{% endblock %} 

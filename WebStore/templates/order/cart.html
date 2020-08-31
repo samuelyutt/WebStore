@@ -18,7 +18,7 @@
         以下是您購物車中的商品 NT$ {{ total_amounts }}
     </div>
     <div class="shipping-fee-message">
-        含運費 NT$ {{ config.shipping_fee }}
+        運費 NT$ {{ config.shipping_fee }}，消費金額滿 NT$ {{ config.discount_shipping_fee }}免運費。
     </div>
     <div class="function">
         {% if not is_not_valid %}
@@ -74,7 +74,11 @@
             運費
         </div>
         <div class="total-right taright">
-            NT$ {{ config.shipping_fee }}
+            {% if shipping_fee == 0 %}
+            此筆訂單免運費
+            {% else %}
+            NT$ {{ shipping_fee }}
+            {% endif %}
         </div>
     </div>
     <div class="container-jcright row total-amounts">
