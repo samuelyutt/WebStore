@@ -92,6 +92,8 @@
     <div class="container-jcright row function">
         {% if not is_not_valid %}
             <a class="create-order button" href="{% url 'order:create' %}">成立訂單</a>
+        {% else %}
+            現在無法成立訂單
         {% endif %}
     </div>
 </div>

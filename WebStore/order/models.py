@@ -43,8 +43,8 @@ class Promo(models.Model):
     total_count_limit = models.IntegerField(default=10, verbose_name='剩餘使用次數')
     
     has_time_limit = models.IntegerField(default=0, choices=HAS_LIMIT_CHOICES, verbose_name='使用時間限制')
-    time_limit_start = models.DateTimeField(default=timezone.now(), verbose_name='開始有效時間')
-    time_limit_expire = models.DateTimeField(default=timezone.now(), verbose_name='截止有效時間')
+    time_limit_start = models.DateTimeField(default=timezone.now, verbose_name='開始有效時間')
+    time_limit_expire = models.DateTimeField(default=timezone.now, verbose_name='截止有效時間')
     
     def __str__(self):
         return str(self.code)

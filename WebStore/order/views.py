@@ -21,7 +21,13 @@ def cart(request):
     context['cart_items'] = request.user.cartitem_set.all()
     context['total_amounts'] = 0
 
+    if not context['config'].is_sellable:
+        context['is_not_valid'] = True
+
     for item in context['cart_items']:
+        if not item.product.is_sellable:
+            item.delete()
+            continue
         if not item.is_valid():
             context['is_not_valid'] = True
         context['total_amounts'] += item.total_amounts()
@@ -105,6 +111,9 @@ def order_create(request):
     context['config'] = Configuration.objects.first()
     user = request.user
     cart_items = user.cartitem_set.all()
+
+    if not context['config'].is_sellable:
+        return HttpResponseRedirect(reverse('order:cart'))
 
     if cart_items:
         for cart_item in cart_items:

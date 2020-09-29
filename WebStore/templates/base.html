@@ -1,6 +1,6 @@
 {% load static %}
 <head>
-    <title>WebStore</title>
+    <title>{{ config.site_name }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">    
@@ -38,6 +38,54 @@
             {% endblock %}
         </div>
     </main>
+
+    <footer class="center">
+        <div class="page-bottom">
+            <div class="container">
+                <div class=page-bottom-section>
+                    <div class="heavy">
+                        選購與了解產品
+                    </div>
+                    <div class="">
+                        <a href="{% url 'products:index' %}">所有產品</a>
+                    </div>
+                    <div class="">
+                        <a href="{% url 'order:cart' %}">購物車</a>
+                    </div>
+                </div>
+                <div class=page-bottom-section>
+                    <div class="heavy">
+                        帳戶與訂單
+                    </div>
+                    <div class="">
+                        <a href="{% url 'profile' %}">我的帳戶</a>
+                    </div>
+                    <div class="">
+                        <a href="{% url 'order:index' %}">我的訂單</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="heavy">
+                    {{ config.site_name }}
+                </div>
+                <div class="">
+                    聯絡電話：{{ config.manager_contact_phone_no }}
+                </div>
+                <div class="">
+                    電子郵件：{{ config.manager_email }}
+                </div>
+                <div class="">
+                    地址：{{ config.manager_address }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="">
+                    {{ config.copyright_info }}
+                </div>
+            </div>
+        </div>
+    </footer>
 
 
 </body>
