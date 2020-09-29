@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="{% static 'Webstore/css/style.css' %}">
+    <link rel="icon" href="{{ config.site_logo_small.url }}" type="image/icon type">
 </head>
 
 <body>
@@ -33,10 +34,16 @@
     </header>
 
     <main class="center">
+        {% if config.is_visitable or login_page %}
         <div class="page-content">
             {% block content %}
             {% endblock %}
         </div>
+        {% else %}
+        <div class="page-content">
+            現在無法造訪這個網頁，請稍後再試！
+        </div>
+        {% endif %}
     </main>
 
     <footer class="center">

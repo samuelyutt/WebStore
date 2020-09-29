@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="{% static 'Webstore/css/style_administration.css' %}">
+    <!-- link rel="icon" href="{{ site_logo_small_url }}" type="image/icon type" -->
     <script src="https://kit.fontawesome.com/dfb9609c56.js" crossorigin="anonymous"></script>
 </head>
 
@@ -23,7 +24,7 @@
             <nav><i class="fas fa-cog"></i>設定</nav>
         </a>
         <a href="{% url 'products:index' %}" target="_blank" class="">
-            <nav><i class="fas fa-chevron-circle-right"></i>造訪網站</nav>
+            <nav><i class="fas fa-chevron-circle-right"></i>造訪您的網站</nav>
         </a>
         <a href="{% url 'logout' %}" class="">
             <nav><i class="fas fa-sign-out-alt"></i>登出</nav>

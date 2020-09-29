@@ -17,6 +17,7 @@ def user_logout(request):
 def user_login(request):
     # try:
     context = {}
+    context['login_page'] = True
     context['config'] = Configuration.objects.first()
     if request.method == 'GET':
         if request.user.is_authenticated:
